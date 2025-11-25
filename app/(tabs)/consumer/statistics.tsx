@@ -6,41 +6,42 @@ import { ScrollView, StyleSheet, Text } from "react-native";
 
 export default function ConsumerStatisticsScreen() {
   const { filterDataChange, toggleDay, unitType } = useStats();
+
   const data: any[] = [
     {
       value: 120,
       label: "Янв",
-      topLabelComponent: () => <Text style={styles.topLabel}>547 кВ</Text>,
+      topLabelComponent: () => <Text style={styles.barTopLabel}>120</Text>,
       frontColor: "#22C55E",
     },
     {
       value: 800,
       label: "Фев",
-      topLabelComponent: () => <Text style={styles.topLabel}>2 010 кВ</Text>,
+      topLabelComponent: () => <Text style={styles.barTopLabel}>800</Text>,
       frontColor: "#22C55E",
     },
     {
       value: 185,
       label: "Март",
-      topLabelComponent: () => <Text style={styles.topLabel}>185 кВ</Text>,
+      topLabelComponent: () => <Text style={styles.barTopLabel}>185</Text>,
       frontColor: "#22C55E",
     },
     {
       value: 350,
       label: "Апр",
-      topLabelComponent: () => <Text style={styles.topLabel}>685 кВ</Text>,
+      topLabelComponent: () => <Text style={styles.barTopLabel}>350</Text>,
       frontColor: "#22C55E",
     },
     {
       value: 2100,
       label: "Май",
-      topLabelComponent: () => <Text style={styles.topLabel}>4 650 кВ</Text>,
+      topLabelComponent: () => <Text style={styles.barTopLabel}>2100</Text>,
       frontColor: "#22C55E",
     },
     {
       value: 1000,
       label: "Июнь",
-      topLabelComponent: () => <Text style={styles.topLabel}>2 120 кВ</Text>,
+      topLabelComponent: () => <Text style={styles.barTopLabel}>1000</Text>,
       frontColor: "#22C55E",
     },
   ];
@@ -70,14 +71,27 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
 
-  topLabel: {
-    backgroundColor: "#fff",
+  barTopLabel: {
+    width: 38,
+    left: -6,
+    top: -1,
+
+    display: "flex",
+
+    textAlign: "center",
+    backgroundColor: "#d0d2d7bd",
     paddingHorizontal: 6,
-    paddingVertical: 4,
-    borderRadius: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
     color: "#111827",
-    fontSize: 12,
-    overflow: "hidden",
+    fontSize: 10,
+    fontWeight: "500",
+
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
     elevation: 2,
+    position: "absolute",
   },
 });
