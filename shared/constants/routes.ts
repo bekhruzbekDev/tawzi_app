@@ -53,4 +53,12 @@ export const allRoutes: RoutesData[] = [
     iconType: "FontAwesome",
     role: ["owner", "consumer", "organization"],
   },
+  {
+    id: "6",
+    title: "Bildirishnomalar",
+    icon: "notifications-sharp",
+    path: "public/notification",
+    iconType: "Ionicons",
+    role: ["owner", "consumer", "organization"],
+  },
 ];
