@@ -35,7 +35,7 @@ export default function RootLayout() {
             style={{ flex: 1, backgroundColor: themeColors.background }}
           >
             <BottomSheetModalProvider>
-              <Stack>
+              <Stack screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="index" options={{ headerShown: false }} />
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                 <Stack.Screen
