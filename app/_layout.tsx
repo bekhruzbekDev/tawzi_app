@@ -47,7 +47,7 @@ export default function RootLayout() {
           </GestureHandlerRootView>
           <StatusBar
             style={themeColors.statusBarStyle}
-            backgroundColor={themeColors.background}
+            // backgroundColor={themeColors.background}
           />
           <Toast />
         </PaperProvider>
