@@ -1,16 +1,16 @@
-import { useThemeColors } from "@/shared/hooks/use-theme";
 import CustomSelect from "@/shared/ui/custom-select";
 import DynamicInput from "@/shared/ui/dynamic-input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DropdownData } from "expo-select-dropdown";
-import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { View } from "react-native";
 import { Button } from "react-native-paper";
 import { consumerSchema } from "../../model/consumers/constants";
 import { ConsumerFormValues } from "../../model/consumers/types";
-export const CreateConsumerForm = () => {
-  const theme = useThemeColors();
+
+interface Props {
+  loading: boolean;
+  onSubmit: (data: ConsumerFormValues) => void;
+}
+export const CreateConsumerForm = ({ loading, onSubmit }: Props) => {
   const {
     control,
     handleSubmit,
@@ -28,28 +28,9 @@ export const CreateConsumerForm = () => {
       username: "",
     },
   });
-  const onSubmit = (data: ConsumerFormValues) => {
-    console.log({ data });
-  };
 
-  const [selected, setSelected] = useState<DropdownData<string, string> | null>(
-    null
-  );
-  const [data] = useState<DropdownData<string, string>[]>([
-    { key: "1", value: "Option 1" },
-    { key: "2", value: "Option 2" },
-    { key: "3", value: "Option 3" },
-  ]);
   return (
-    <View
-      style={{
-        padding: 16,
-        backgroundColor: theme.surface,
-        shadowColor: theme.shadow,
-        borderRadius: 12,
-        borderColor: theme.border,
-      }}
-    >
+    <>
       <DynamicInput
         control={control}
         name="name"
@@ -106,7 +87,7 @@ export const CreateConsumerForm = () => {
       />
       <DynamicInput
         control={control}
-        name="meter_number"
+        name="parent"
         label="Ulangan hisoblagich"
         placeholder=""
       />
@@ -114,10 +95,16 @@ export const CreateConsumerForm = () => {
       <Button
         onPress={handleSubmit(onSubmit)}
         mode="contained"
-        style={{ borderRadius: 12, padding: 4, marginTop: 10 }}
+        loading={loading}
+        style={{
+          borderRadius: 12,
+          padding: 4,
+          marginTop: 10,
+          marginBottom: 20,
+        }}
       >
         Qo'shish
       </Button>
-    </View>
+    </>
   );
 };

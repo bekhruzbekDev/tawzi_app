@@ -42,7 +42,7 @@ export const allRoutes: RoutesData[] = [
     icon: "space-dashboard",
     path: "organization/index",
     iconType: "MaterialIcons",
-    role: ["organization", "owner"],
+    role: ["organization",],
   },
   {
     id: "6",
@@ -50,7 +50,7 @@ export const allRoutes: RoutesData[] = [
     icon: "users",
     path: "organization/consumers",
     iconType: "FontAwesome",
-    role: ["organization", "owner"],
+    role: ["organization",],
   },
    {
     id: "9",
@@ -58,7 +58,7 @@ export const allRoutes: RoutesData[] = [
     icon: "gas-meter",
     path: "organization/meters",
     iconType: "MaterialIcons",
-    role: ["organization", "owner"],
+    role: ["organization", ],
   },
   // public
   {

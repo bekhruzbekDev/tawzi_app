@@ -4,60 +4,79 @@ import Feather from "@expo/vector-icons/Feather";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import React from "react";
 import {
+  ActivityIndicator,
+  FlatList,
   GestureResponderEvent,
   Pressable,
   StyleSheet,
   Text,
   View,
 } from "react-native";
+import { useConsumersData } from "../../model/consumers/use-consumers";
 
+
+type MeterType = {
+  count: number;
+  value: number;
+};
 type Consumer = {
   id: string;
   name: string;
   phone?: string;
-  electricity?: number;
-  gas?: number;
-  water?: number;
+  electricity?: MeterType | null;
+  gas?: MeterType | null;
+  water?: MeterType | null;
   createdAt?: string;
 };
 
-const demoConsumers: Consumer[] = [
-  {
-    id: "c1",
-    name: "2-fabrika",
-    phone: "+998901234567",
-    electricity: 32.04,
-    gas: undefined,
-    water: undefined,
-    createdAt: "2025-09-24",
-  },
-  {
-    id: "c2",
-    name: "Markaziy Ombor",
-    phone: "+998901234568",
-    electricity: 210.34,
-    gas: 12.5,
-    water: 8.2,
-    createdAt: "2025-07-12",
-  },
-  {
-    id: "c3",
-    name: "Markaziy Ombor",
-    phone: "+998901234568",
-    electricity: 210.34,
-    gas: 12.5,
-    water: 8.2,
-    createdAt: "2025-07-12",
-  },
-];
+import { ConsumerSkeleton } from "./consumer-skeleton";
 
 export const ConsumesList = () => {
+  const {
+    customData,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useConsumersData();
+
+
+  if (isLoading) {
+    return (
+      <View>
+        <ConsumerSkeleton />
+        <ConsumerSkeleton />
+        <ConsumerSkeleton />
+      </View>
+    );
+  }
+
+
   return (
-    <>
-      {demoConsumers.map((c) => (
-        <Card key={c.id} consumer={c} />
-      ))}
-    </>
+    <FlatList
+      data={customData}
+      keyExtractor={(item) => item.id.toString()}
+      renderItem={({ item }) => <Card consumer={item} />}
+      ListEmptyComponent={
+        <View style={{ padding: 20, alignItems: "center" }}>
+          <Text>Ma'lumot topilmadi</Text>
+        </View>
+      }
+      onEndReached={() => {
+        if (hasNextPage) {
+          fetchNextPage();
+        }
+      }}
+      onEndReachedThreshold={0.5}
+      ListFooterComponent={
+        isFetchingNextPage ? (
+          <View style={{ padding: 10 }}>
+            <ActivityIndicator size="small" />
+          </View>
+        ) : null
+      }
+      contentContainerStyle={{ paddingBottom: 20 }}
+    />
   );
 };
 
@@ -127,7 +146,7 @@ const Card = ({ consumer, onEdit, onDelete }: CardProps) => {
       {/* Electricity block */}
       <View style={styles.row}>
         <Text style={[styles.rowLabel, { color: Colors.primary }]}>
-          ⚡️ Elektr
+          ⚡️ Elektr ({consumer.electricity?.count})
         </Text>
         <View style={styles.rowCenter}>
           <Text style={[styles.subTitle, { color: theme.muted }]}>
@@ -135,7 +154,7 @@ const Card = ({ consumer, onEdit, onDelete }: CardProps) => {
           </Text>
           <Text style={[styles.value, { color: theme.text }]}>
             {consumer.electricity != null
-              ? `${formatNum(consumer.electricity)} kVt`
+              ? `${formatNum(consumer.electricity.value)} kVt`
               : "—"}
           </Text>
         </View>
@@ -145,10 +164,12 @@ const Card = ({ consumer, onEdit, onDelete }: CardProps) => {
 
       {/* Gas block */}
       <View style={styles.row}>
-        <Text style={[styles.rowLabel, { color: "#F6A623" }]}>🔥 Gaz</Text>
+        <Text style={[styles.rowLabel, { color: "#F6A623" }]}>
+          🔥 Gaz ({consumer.gas?.count})
+        </Text>
         <Text style={[styles.rowText, { color: theme.muted }]}>
           {consumer.gas != null
-            ? `${formatNum(consumer.gas)} m³`
+            ? `${formatNum(consumer.gas.value)} m³`
             : "Hisoblagich mavjud emas"}
         </Text>
       </View>
@@ -157,10 +178,12 @@ const Card = ({ consumer, onEdit, onDelete }: CardProps) => {
 
       {/* Water block */}
       <View style={styles.row}>
-        <Text style={[styles.rowLabel, { color: "#2FBF68" }]}>💧 Suv</Text>
+        <Text style={[styles.rowLabel, { color: "#2FBF68" }]}>
+          💧 Suv ({consumer.water?.count}){" "}
+        </Text>
         <Text style={[styles.rowText, { color: theme.muted }]}>
           {consumer.water != null
-            ? `${formatNum(consumer.water)} m³`
+            ? `${formatNum(consumer.water.value)} m³`
             : "Hisoblagich mavjud emas"}
         </Text>
       </View>
