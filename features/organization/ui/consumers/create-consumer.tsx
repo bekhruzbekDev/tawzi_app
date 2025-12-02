@@ -3,24 +3,26 @@ import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useRef } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useThemeColors } from "../../../../shared/hooks/use-theme";
-import { ConsumerFormValues } from "../../model/consumers/types";
+import { Consumer, ConsumerEditFormValues, ConsumerFormValues } from "../../model/consumers/types";
 import { useCreateConsumer } from "../../model/consumers/use-create-consumer";
 import { CreateConsumerForm } from "./consumer-form";
 
-interface BottomSheetDataProps {}
 
-export const CreateUser = React.forwardRef<BottomSheet, BottomSheetDataProps>(
+
+interface BottomSheetDataProps {
+  consumer :Consumer |null
+}
+
+export const CreateConsumer = React.forwardRef<BottomSheet, BottomSheetDataProps>(
   (props, ref) => {
-    const snapPoints = useMemo(() => ["60%", "100%"], []);
+    const snapPoints = useMemo(() => ["70%", "100%"], []);
     const theme = useThemeColors();
 
-    const handleSheetChanges = useCallback((index: number) => {
-      console.log("handleSheetChanges", index);
-    }, []);
-
+    
+const formRef = useRef<any>(null);
     const renderBackdrop = useCallback(
       (props: any) => (
         <BottomSheetBackdrop
@@ -38,16 +40,33 @@ export const CreateUser = React.forwardRef<BottomSheet, BottomSheetDataProps>(
       }
     }, [ref]);
 
-    const { mutate, isSuccess, isPending } = useCreateConsumer();
+    const handleSheetChanges = useCallback((index: number) => {
+        if (index === -1) {
+            formRef.current?.resetForm(); 
+        }
+    }, []);
 
-    const onsubmit = (data: ConsumerFormValues) => {
-      mutate({
+    const { CreateMutation, loading ,updateMutation} = useCreateConsumer(closeSheet);
+
+    const onsubmit = (data: ConsumerFormValues | ConsumerEditFormValues) => {
+
+      if(!props.consumer){
+      CreateMutation({
         name: data.name,
-        password: data.password,
+        password: data?.password ??"",
         phone_number: data.phone_number,
         username: data.username,
-      });
-    };
+      })
+    }else{
+      updateMutation({data: {
+        name: data.name,
+        password: data?.password ??"",
+        phone_number: data.phone_number,
+        username: data.username,
+      },id:props.consumer?.id})
+    }}
+
+
     return (
       <BottomSheet
         backgroundStyle={{
@@ -56,9 +75,9 @@ export const CreateUser = React.forwardRef<BottomSheet, BottomSheetDataProps>(
         ref={ref}
         index={-1}
         snapPoints={snapPoints}
-        onChange={handleSheetChanges}
         backdropComponent={renderBackdrop}
         enablePanDownToClose={true}
+        onChange={handleSheetChanges}
         keyboardBehavior="interactive"
       >
         <View style={styles.header}>
@@ -70,7 +89,7 @@ export const CreateUser = React.forwardRef<BottomSheet, BottomSheetDataProps>(
           </TouchableOpacity>
         </View>
         <BottomSheetScrollView contentContainerStyle={styles.contentContainer}>
-          <CreateConsumerForm loading={isPending} onSubmit={onsubmit} />
+          <CreateConsumerForm loading={loading} onSubmit={onsubmit} consumer={props.consumer??null} ref={formRef}/>
         </BottomSheetScrollView>
       </BottomSheet>
     );

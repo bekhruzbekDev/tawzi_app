@@ -65,6 +65,7 @@ const mapperData = (data: GetConsumersData[]) => {
       id: id,
       name: item.name,
       phone: item.phone_number,
+      username: item.username??"",
       electricity: {
         count: item.electric?.length ?? 0,
         value: calculateValue(item.electric),

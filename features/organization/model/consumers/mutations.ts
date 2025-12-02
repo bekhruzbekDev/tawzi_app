@@ -6,3 +6,10 @@ export const createConsumer = (data: CreateConsumerData) => {
     .post("organization/create/consumer/", data)
     .then((res) => res.data);
 };
+
+
+export const updateConsumer = (data: CreateConsumerData,id:string) => {
+  return axios
+    .put(`organization/consumer/${id}/edit/`, data)
+    .then((res) => res.data);
+};

@@ -49,6 +49,7 @@ export default function RootLayout() {
             style={themeColors.statusBarStyle}
             // backgroundColor={themeColors.background}
           />
+          
           <Toast />
         </PaperProvider>
       </QueryClientProvider>
