@@ -6,32 +6,26 @@ import React from "react";
 import {
   ActivityIndicator,
   FlatList,
-  GestureResponderEvent,
   Pressable,
   StyleSheet,
   Text,
-  View,
+  View
 } from "react-native";
 import { useConsumersData } from "../../model/consumers/use-consumers";
 
 
-type MeterType = {
-  count: number;
-  value: number;
-};
-type Consumer = {
-  id: string;
-  name: string;
-  phone?: string;
-  electricity?: MeterType | null;
-  gas?: MeterType | null;
-  water?: MeterType | null;
-  createdAt?: string;
-};
 
+
+import { Consumer } from "../../model/consumers/types";
 import { ConsumerSkeleton } from "./consumer-skeleton";
 
-export const ConsumesList = () => {
+interface Props {
+    editChange: (e: Consumer | null) => void;
+    deleteChange: (e: Consumer | null) => void;
+} 
+
+export const ConsumesList = (props:Props) => {
+  const {editChange,deleteChange}=props
   const {
     customData,
     isLoading,
@@ -56,9 +50,9 @@ export const ConsumesList = () => {
     <FlatList
       data={customData}
       keyExtractor={(item) => item.id.toString()}
-      renderItem={({ item }) => <Card consumer={item} />}
+      renderItem={({ item }) => <Card consumer={item} onEdit={(e)=>editChange(item)} onDelete={(e)=>deleteChange(item)}/>}
       ListEmptyComponent={
-        <View style={{ padding: 20, alignItems: "center" }}>
+        <View style={{ padding: 20, alignItems: "center" }}>  
           <Text>Ma'lumot topilmadi</Text>
         </View>
       }
@@ -82,11 +76,11 @@ export const ConsumesList = () => {
 
 type CardProps = {
   consumer: Consumer;
-  onEdit?: (e: GestureResponderEvent) => void;
-  onDelete?: (e: GestureResponderEvent) => void;
+  onEdit?: (e: Consumer) => void;
+  onDelete?: (e: Consumer) => void;
 };
 
-const Card = ({ consumer, onEdit, onDelete }: CardProps) => {
+const Card = ({ consumer, onEdit, onDelete, }: CardProps) => {
   const theme = useThemeColors();
 
   return (
@@ -116,7 +110,7 @@ const Card = ({ consumer, onEdit, onDelete }: CardProps) => {
 
         <View style={styles.actions}>
           <Pressable
-            onPress={onEdit ?? (() => console.log("edit", consumer.id))}
+            onPress={()=>onEdit?.(consumer)}
             style={[
               styles.iconBtn,
               { backgroundColor: theme.surface, borderColor: theme.border },
@@ -124,19 +118,19 @@ const Card = ({ consumer, onEdit, onDelete }: CardProps) => {
           >
             <MaterialCommunityIcons
               name="lead-pencil"
-              size={24}
+              size={20}
               color={Colors.primary}
             />
           </Pressable>
 
           <Pressable
-            onPress={onDelete ?? (() => console.log("delete", consumer.id))}
+            onPress={()=>onDelete?.(consumer)}
             style={[
               styles.iconBtn,
               { backgroundColor: theme.surface, borderColor: theme.border },
             ]}
           >
-            <Feather name="trash-2" size={24} color="#ef4444" />
+            <Feather name="trash-2" size={20} color="#ef4444" />
           </Pressable>
         </View>
       </View>

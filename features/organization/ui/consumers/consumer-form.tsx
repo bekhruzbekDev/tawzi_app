@@ -1,34 +1,61 @@
 import CustomSelect from "@/shared/ui/custom-select";
 import DynamicInput from "@/shared/ui/dynamic-input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import React, { useEffect, useImperativeHandle } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "react-native-paper";
-import { consumerSchema } from "../../model/consumers/constants";
-import { ConsumerFormValues } from "../../model/consumers/types";
+import { consumerEditSchema, consumerSchema } from "../../model/consumers/constants";
+import { Consumer, ConsumerEditFormValues, ConsumerFormValues } from "../../model/consumers/types";
 
 interface Props {
   loading: boolean;
-  onSubmit: (data: ConsumerFormValues) => void;
+  onSubmit: (data: ConsumerFormValues | ConsumerEditFormValues) => void;
+  consumer:Consumer |null
 }
-export const CreateConsumerForm = ({ loading, onSubmit }: Props) => {
-  const {
+export const CreateConsumerForm =React.forwardRef<any,Props>( ({ loading, onSubmit,consumer }: Props,ref) => {
+  const {   
     control,
     handleSubmit,
-    formState: { isSubmitting },
     reset,
-  } = useForm<ConsumerFormValues>({
-    resolver: zodResolver(consumerSchema),
+    formState: { errors },
+  } = useForm<ConsumerEditFormValues | ConsumerFormValues>({
+    resolver: zodResolver(!consumer ? consumerSchema : consumerEditSchema),
     defaultValues: {
-      name: "",
+      name: consumer?.name??"",
       device_type: "electric",
       meter_number: "",
-      parent: "",
-      password: "",
-      phone_number: "",
-      username: "",
+      parent:"",
+      password:"",
+      phone_number: consumer?.phone??"",
+      username: consumer?.username??"",
+
     },
   });
 
+  useImperativeHandle(ref, () => ({
+      resetForm: () => {
+        reset({
+          name: "",
+          device_type: "electric",
+          meter_number: "",
+          parent:"",
+          password:"",
+          phone_number: "",
+          username: "",
+        }); 
+      },
+    }));
+
+  useEffect(() => {
+    if (consumer) {
+      reset({
+        name: consumer.name,
+        password:"",
+        phone_number: consumer.phone,
+        username: consumer.username,
+      });
+    }
+  }, [consumer, reset]);
   return (
     <>
       <DynamicInput
@@ -58,6 +85,9 @@ export const CreateConsumerForm = ({ loading, onSubmit }: Props) => {
         secureTextEntry
         placeholder=""
       />
+      {!consumer?.username && (
+        <>
+
       <Controller
         control={control}
         name="device_type"
@@ -91,6 +121,8 @@ export const CreateConsumerForm = ({ loading, onSubmit }: Props) => {
         label="Ulangan hisoblagich"
         placeholder=""
       />
+      </>
+       )}
 
       <Button
         onPress={handleSubmit(onSubmit)}
@@ -107,4 +139,6 @@ export const CreateConsumerForm = ({ loading, onSubmit }: Props) => {
       </Button>
     </>
   );
-};
+})
+
+

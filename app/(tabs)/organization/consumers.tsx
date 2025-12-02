@@ -1,24 +1,25 @@
-import BottomSheet from "@gorhom/bottom-sheet"; // Tipi uchun import qilamiz
-import React, { useRef } from "react";
+import React from "react";
 
+import { useConsumerActions } from "@/features/organization/model/consumers/use-consumer-actions";
 import { ConsumersHeader } from "@/features/organization/ui/consumers/consumer-header";
 import { ConsumesList } from "@/features/organization/ui/consumers/consumers-list";
-import { CreateUser } from "@/features/organization/ui/consumers/create-consumer";
+import { CreateConsumer } from "@/features/organization/ui/consumers/create-consumer";
 import { Colors } from "@/shared/constants/theme";
 import { useThemeColors } from "@/shared/hooks/use-theme";
+import DeleteModal from "@/shared/ui/delete-modal";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 export default function ConsumersScreen() {
   const theme = useThemeColors();
 
-  const sheetRef = useRef<BottomSheet | null>(null);
+  const { consumer, sheetRef, editChange, deleteChange,deleteModalVisible,setDeleteModalVisible,setConsumer } = useConsumerActions();
 
   return (
     <>
       <ConsumersHeader />
       <View style={{ flex: 1, paddingHorizontal: 16 }}>
-        <ConsumesList />
+        <ConsumesList editChange={editChange} deleteChange={deleteChange}/>
       </View>
 
       <TouchableOpacity
@@ -26,12 +27,13 @@ export default function ConsumersScreen() {
           styles.addBtn,
           { backgroundColor: theme.surface, shadowColor: theme.shadow },
         ]}
-        onPress={() => sheetRef.current?.snapToIndex(1)}
+        onPress={() => {sheetRef.current?.snapToIndex(1);setConsumer(null)}}
       >
         <AntDesign name="plus" size={24} color={Colors.primary} />
       </TouchableOpacity>
 
-      <CreateUser ref={sheetRef} />
+      <CreateConsumer ref={sheetRef} consumer={consumer} />
+      <DeleteModal visible={deleteModalVisible} onchange={setDeleteModalVisible} queryKey="get-consumers"/>
     </>
   );
 }

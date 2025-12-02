@@ -10,11 +10,11 @@ export default function TabLayout() {
   const tabBarInset = useStore((state) => state.tabBarInset);
   const themeColors = useThemeColors();
   const userRole = userData
-    ? userData?.role == "Consumer"
+    ? userData?.role === "Consumer"
       ? "consumer"
-      : userData?.role == "OrganizationAdmin"
+      : userData?.role === "OrganizationAdmin"
       ? "organization"
-      : userData?.role == "Employer"
+      : userData?.role === "Employer"
       ? "organization"
       : "owner"
     : "";
