@@ -1,51 +1,52 @@
+import { useDashboardData } from "@/features/organization/model/dashboard/use-dashboard-data";
+import AlertStats from "@/features/organization/ui/dashboard/alert-stats";
+import { AlertStatsSkeleton } from "@/features/organization/ui/dashboard/alert-stats-skeleton";
 import { OrganizationCharts } from "@/features/organization/ui/dashboard/charts";
 import { OrgDashboardHeader } from "@/features/organization/ui/dashboard/dashboard-header";
-import OrganizationStatsList from "@/features/organization/ui/dashboard/stats-list";
+import { FinanceChart } from "@/features/organization/ui/dashboard/finance-chart";
+import { FinanceChartSkeleton } from "@/features/organization/ui/dashboard/finance-chart-skeleton";
+import OrganizationStatsList, { ResourceType } from "@/features/organization/ui/dashboard/stats-list";
+import { StatsListSkeleton } from "@/features/organization/ui/dashboard/stats-list-skeleton";
+import TopConsumers from "@/features/organization/ui/dashboard/top-consumers";
+import { TopConsumersSkeleton } from "@/features/organization/ui/dashboard/top-consumers-skeleton";
 
 import { ScrollView } from "react-native";
-const consumers = [
-  {
-    id: "c1",
-    name: "4-fabrika",
-    accounts: 1,
-    gas: 0,
-    water: 0,
-    energy: 99.47,
-  },
-  {
-    id: "c2",
-    name: "9-fabrika",
-    accounts: 1,
-    gas: 0,
-    water: 0,
-    energy: 90.63,
-  },
-  {
-    id: "c3",
-    name: "7-fabrika",
-    accounts: 1,
-    gas: 0,
-    water: 0,
-    energy: 89.8,
-  },
-  {
-    id: "c4",
-    name: "Markaziy Ombor",
-    accounts: 3,
-    gas: 12.5,
-    water: 8.2,
-    energy: 210.34,
-  },
-];
+
 export default function OrganizationAdmin() {
-  return (
+
+const {unitType, setUnitType, deviceTypes,dashboardStats,alertStats,topConsumers,financeStats,isLoading,hasBilling} = useDashboardData();
+  return (  
     <>
-      <OrgDashboardHeader />
+      <OrgDashboardHeader unitType={unitType} setUnitType={setUnitType} deviceTypes={deviceTypes} />
 
       <ScrollView>
-        <OrganizationStatsList />
+        {isLoading ? (
+          <StatsListSkeleton />
+        ) : (
+          <OrganizationStatsList resourceType={unitType as ResourceType} data={dashboardStats}/>
+        )}
+        
         <OrganizationCharts />
-        {/* <TopConsumers data={consumers} /> */}
+        
+        {hasBilling && isLoading && (
+          <FinanceChartSkeleton />
+        )}
+        
+        {hasBilling && !isLoading && (
+          <FinanceChart data={financeStats} />
+        )}
+        
+        {isLoading ? (
+          <AlertStatsSkeleton />
+        ) : (
+          <AlertStats data={alertStats} />
+        )}
+        
+        {isLoading ? (
+          <TopConsumersSkeleton />
+        ) : (
+          <TopConsumers data={topConsumers} resourceType={unitType as  ResourceType}/>
+        )}
       </ScrollView>
     </>
   );
