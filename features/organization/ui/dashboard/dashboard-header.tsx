@@ -2,17 +2,21 @@ import { Colors } from "@/shared/constants/theme";
 import { useThemeColors } from "@/shared/hooks/use-theme";
 import { Ionicons } from "@expo/vector-icons";
 
-import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-export const OrgDashboardHeader = () => {
-  const [unitType, setUnitType] = useState("elektr");
+
+interface Props {
+    unitType: string;
+    setUnitType: (unitType: string) => void;
+    deviceTypes: string[];
+}
+export const OrgDashboardHeader = ({unitType, setUnitType, deviceTypes}: Props) => {
   const theme = useThemeColors();
-  const deviceTypes = ["Elektr", "Gaz", "Suv"];
   return (
     <View style={styles.container}>
       <View style={styles.unitRow}>
+
         <View style={styles.unitPills}>
-          {deviceTypes.map((data) => (
+          {deviceTypes.length >1&&  deviceTypes.map((data) => (
             <TouchableOpacity
               key={data}
               style={[
