@@ -81,7 +81,7 @@ useEffect(() => {
       device_type:meter.type??"",
       direction: meter.device_meter_direction??"outgoing",
       consumer: meter.consumer??"",
-      parent: meter.parent??null,
+      parent: meter?.parent ?meter.parent:null,
       is_generator: meter?.is_generator??false,
       is_solar_panel: meter?.is_solar_panel??false,
       is_main: meter?.is_main??false,
