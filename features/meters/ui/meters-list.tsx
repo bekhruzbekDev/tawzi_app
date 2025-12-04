@@ -29,10 +29,11 @@ export default function MetersList({ onCommandPress, onDetailPress }: Props) {
     );
   }
 
+
   return (
     <FlatList
       data={customData}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item,i) => String(i)}
       renderItem={({ item }) => (
         <MeterCard
           meter={item}

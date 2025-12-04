@@ -33,6 +33,8 @@ export const useConsumersData = () => {
     return mapperData(page?.data ?? []);
   }) ?? [];
 
+const selectData = customData.map(item=>({value:item.id,label:item.name}))
+
   return {
     customData,
     isLoading,
@@ -43,6 +45,7 @@ export const useConsumersData = () => {
     isError,
     error,
     refetch,
+    selectData
   };
 };
 

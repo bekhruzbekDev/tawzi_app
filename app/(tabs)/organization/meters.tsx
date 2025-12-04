@@ -1,18 +1,21 @@
 import { Meter } from "@/features/meters/model/types";
-import CreateMeter from "@/features/meters/ui/create-meter";
 import { MeterDetail } from "@/features/meters/ui/meter-detail";
 import MetersList from "@/features/meters/ui/meters-list";
 import { SentCommand } from "@/features/meters/ui/sent-command";
+import { ConsumersHeader } from "@/features/organization/ui/consumers/consumer-header";
 import { Colors } from "@/shared/constants/theme";
 import { useThemeColors } from "@/shared/hooks/use-theme";
 import { AntDesign } from "@expo/vector-icons";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { useRouter } from "expo-router";
 import React, { useRef, useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 export default function Meters() {
   const theme = useThemeColors();
-  const createSheetRef = useRef<BottomSheetModal | null>(null);
+
+  const router = useRouter()
+  // const createSheetRef = useRef<BottomSheetModal | null>(null);
   const commandSheetRef = useRef<BottomSheetModal | null>(null);
   const detailSheetRef = useRef<BottomSheetModal | null>(null);
 
@@ -30,24 +33,24 @@ export default function Meters() {
 
   return (
     <>
+         <ConsumersHeader />
       <View style={{ flex: 1, paddingHorizontal: 16 }}>
         <MetersList
           onCommandPress={handleCommandPress}
           onDetailPress={handleDetailPress}
         />
       </View>
-
       <TouchableOpacity
         style={[
           styles.addBtn,
           { backgroundColor: theme.surface, shadowColor: theme.shadow },
         ]}
-        onPress={() => createSheetRef.current?.present()}
+        onPress={() =>router.push("/create-meter")}
       >
         <AntDesign name="plus" size={24} color={Colors.primary} />
       </TouchableOpacity>
 
-      <CreateMeter ref={createSheetRef} />
+      {/* <CreateMeter ref={createSheetRef} /> */}
       <SentCommand ref={commandSheetRef} meter={selectedMeter} />
       <MeterDetail ref={detailSheetRef} meter={selectedMeter} />
     </>

@@ -22,7 +22,7 @@ export default function CustomSelect({
   const [list, setList] = useState(items);
   const theme = useThemeColors();
   return (
-    <View style={{ marginBottom: 20 }}>
+    <View style={{ marginBottom: 20}}>
       {label && (
         <Text style={[styles.label, { color: theme.muted }]}>{label}</Text>
       )}
@@ -51,6 +51,8 @@ export default function CustomSelect({
           { backgroundColor: theme.surface, borderColor: theme.border },
         ]}
         listMode="SCROLLVIEW"
+        zIndex={1000}
+        zIndexInverse={99999}
       />
 
       {error && <Text style={styles.error}>{error}</Text>}
