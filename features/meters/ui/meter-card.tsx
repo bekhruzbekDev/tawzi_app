@@ -59,7 +59,7 @@ export const MeterCard = ({ meter, onCommandPress, onDetailPress }: Props) => {
           </View>
           <View>
             <Text style={[styles.meterNumber, { color: theme.text }]}>
-              {meter.meter_number}
+              {meter.serial_number}
             </Text>
             <Text style={[styles.subText, { color: theme.muted }]}>
               {meter.type === "electric"
@@ -67,7 +67,7 @@ export const MeterCard = ({ meter, onCommandPress, onDetailPress }: Props) => {
                 : meter.type === "gas"
                 ? "Gaz"
                 : "Suv"}{" "}
-              • {meter.direction === "incoming" ? "Kiruvchi" : "Chiquvchi"}
+              • {meter.meter_direction === "incoming" ? "Kiruvchi" : "Chiquvchi"}
             </Text>
           </View>
         </View>
@@ -83,15 +83,7 @@ export const MeterCard = ({ meter, onCommandPress, onDetailPress }: Props) => {
 
       {/* Content */}
       <View style={styles.content}>
-        <View>
-          <Text style={[styles.label, { color: theme.muted }]}>
-            Iste'molchi
-          </Text>
-          <Text style={[styles.value, { color: theme.text }]}>
-            {meter.consumer?.name ?? "Mavjud emas"}
-          </Text>
-        </View>
-        <View style={{ alignItems: "flex-end" }}>
+        <View style={{ flex: 1 }}>
           <Text style={[styles.label, { color: theme.muted }]}>
             Joriy ko'rsatkich
           </Text>

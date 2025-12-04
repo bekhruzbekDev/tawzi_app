@@ -7,6 +7,7 @@ import {
 } from "@gorhom/bottom-sheet";
 import React, { useCallback, useMemo } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Toast from "react-native-toast-message";
 import { CreateMeterValues } from "../model/types";
 import { useCreateMeter } from "../model/use-create-meter";
 import { MeterForm } from "./meter-form";
@@ -39,14 +40,26 @@ export default React.forwardRef<BottomSheetModal, BottomSheetDataProps>(
       }
     }, [ref]);
 
-    const { mutate, isPending } = useCreateMeter();
+  const mutation = useCreateMeter();
 
     const onsubmit = (data: CreateMeterValues) => {
-      mutate(data, {
-        onSuccess: () => {
-          closeSheet();
-        },
-      });
+
+mutation.mutate(data,{
+  onSuccess:(data)=>{
+    // closeSheet()
+    console.log({data});
+  },
+  onError:(error:any)=>{
+    console.log({error});
+    
+
+    Toast.show({
+      type: "error",
+      text1: "Xatolik",
+      text2: error?.data?.message,
+    });
+  }
+})
     };
 
     return (
@@ -71,7 +84,7 @@ export default React.forwardRef<BottomSheetModal, BottomSheetDataProps>(
           </TouchableOpacity>
         </View>
         <BottomSheetScrollView contentContainerStyle={styles.contentContainer}>
-          <MeterForm loading={isPending} onSubmit={onsubmit} />
+          <MeterForm loading={false} onSubmit={onsubmit} />
         </BottomSheetScrollView>
       </BottomSheetModal>
     );

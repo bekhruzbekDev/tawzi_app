@@ -1,12 +1,14 @@
 import { Colors } from "@/shared/constants/theme";
 import { useThemeColors } from "@/shared/hooks/use-theme";
+import DeleteModal from "@/shared/ui/delete-modal";
 import { AntDesign, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
-import React, { useCallback, useMemo } from "react";
+import { useRouter } from "expo-router";
+import React, { useCallback, useMemo, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Button } from "react-native-paper";
 import { Meter } from "../model/types";
@@ -15,11 +17,16 @@ interface Props {
   meter: Meter | null;
 }
 
+
+
 export const MeterDetail = React.forwardRef<BottomSheetModal, Props>(
   ({ meter }, ref) => {
+    const [deleteModalVisible,setDeleteModalVisible] = useState({open:false,path:""});
     const snapPoints = useMemo(() => ["60%", "90%"], []);
     const theme = useThemeColors();
 
+
+    const router = useRouter()
     const renderBackdrop = useCallback(
       (props: any) => (
         <BottomSheetBackdrop
@@ -60,6 +67,9 @@ export const MeterDetail = React.forwardRef<BottomSheetModal, Props>(
     };
 
     return (
+      <>
+     
+     
       <BottomSheetModal
         backgroundStyle={{
           backgroundColor: theme.background,
@@ -95,7 +105,7 @@ export const MeterDetail = React.forwardRef<BottomSheetModal, Props>(
               </View>
               <View style={{ flex: 1, marginLeft: 12 }}>
                 <Text style={[styles.meterNumber, { color: theme.text }]}>
-                  {meter?.meter_number}
+                  {meter?.serial_number}
                 </Text>
                 <Text style={[styles.subText, { color: theme.muted }]}>
                   {meter?.type === "electric"
@@ -104,7 +114,7 @@ export const MeterDetail = React.forwardRef<BottomSheetModal, Props>(
                     ? "Gaz"
                     : "Suv"}{" "}
                   •{" "}
-                  {meter?.direction === "incoming" ? "Kiruvchi" : "Chiquvchi"}
+                  {meter?.meter_direction === "incoming" ? "Kiruvchi" : "Chiquvchi"}
                 </Text>
               </View>
               <View style={[styles.badge, { borderColor: theme.border }]}>
@@ -134,11 +144,13 @@ export const MeterDetail = React.forwardRef<BottomSheetModal, Props>(
                     styles.actionBtn,
                     { borderColor: theme.border, backgroundColor: theme.surface },
                   ]}
+                    onPress={()=>{closeSheet(),router.push({pathname:"/create-meter",params:{id:meter?.id,device_type:meter?.type}})}}
                 >
                   <MaterialCommunityIcons
                     name="pencil"
                     size={20}
                     color={theme.text}
+
                   />
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -146,6 +158,7 @@ export const MeterDetail = React.forwardRef<BottomSheetModal, Props>(
                     styles.actionBtn,
                     { borderColor: theme.border, backgroundColor: theme.surface },
                   ]}
+                  onPress={()=>{setDeleteModalVisible({open:true,path:`devices/${meter?.type}/${meter?.id}/delete/`}),closeSheet()}}
                 >
                   <Feather name="trash-2" size={20} color="#ef4444" />
                 </TouchableOpacity>
@@ -211,9 +224,14 @@ export const MeterDetail = React.forwardRef<BottomSheetModal, Props>(
           </View>
         </BottomSheetScrollView>
       </BottomSheetModal>
+       <DeleteModal visible={deleteModalVisible} onchange={setDeleteModalVisible} queryKey="get-meters"/>
+      </>
     );
+
   }
 );
+
+// EL-MN-2003
 
 const styles = StyleSheet.create({
   contentContainer: {
