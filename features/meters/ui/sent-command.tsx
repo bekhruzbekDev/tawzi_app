@@ -3,26 +3,48 @@ import { useThemeColors } from "@/shared/hooks/use-theme";
 import CustomSelect from "@/shared/ui/custom-select";
 import { AntDesign } from "@expo/vector-icons";
 import {
-    BottomSheetBackdrop,
-    BottomSheetModal,
-    BottomSheetScrollView,
+  BottomSheetBackdrop,
+  BottomSheetModal,
+  BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
+import { useMutation } from "@tanstack/react-query";
 import React, { useCallback, useMemo, useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Button, SegmentedButtons } from "react-native-paper";
-import { Meter } from "../model/types";
+import Toast from "react-native-toast-message";
+import { sendCommandMutation } from "../model/mutations";
+import { Meter, SendCommandValues } from "../model/types";
 
 interface Props {
   meter: Meter | null;
 }
 
-export const SentCommand = React.forwardRef<BottomSheetModal, Props>(
+export const SendCommand = React.forwardRef<BottomSheetModal, Props>(
   ({ meter }, ref) => {
-    const snapPoints = useMemo(() => ["50%", "90%"], []);
+    const snapPoints = useMemo(() => ["60%", "90%"], []);
     const theme = useThemeColors();
-    const [command, setCommand] = useState("on");
+    const [command, setCommand] = useState<"open" | "close">("open");
     const [duration, setDuration] = useState("1");
     const [comment, setComment] = useState("");
+
+
+const {mutate,isPending} =useMutation({
+  mutationFn:(data:SendCommandValues)=>sendCommandMutation(data,command),
+  mutationKey:["send-command",],
+  onSuccess:(data)=>{
+  Toast.show({
+    type: "success",
+    text1: data?.data?.message,
+  })
+  closeSheet()
+  },
+  onError:(error:any)=>{
+    Toast.show({
+      type: "error",
+      text1: error?.data?.message??"Xatolik yuz berdi",
+    })
+  }
+})
 
     const renderBackdrop = useCallback(
       (props: any) => (
@@ -36,19 +58,22 @@ export const SentCommand = React.forwardRef<BottomSheetModal, Props>(
     );
 
     const closeSheet = useCallback(() => {
+      setCommand("open")
+      setDuration("1")
+      setComment("")
       if (ref && typeof ref !== "function") {
         ref.current?.dismiss();
       }
     }, [ref]);
 
     const handleSubmit = () => {
-      console.log("Sending Command:", {
-        meterId: meter?.id,
-        command,
-        duration,
-        comment,
-      });
-      closeSheet();
+     mutate({
+      device_id: Number(meter?.id),
+      timeout_min:duration,
+      comment:comment ??null,
+      device_type:meter?.type??null,
+     })
+    
     };
 
     return (
@@ -70,7 +95,7 @@ export const SentCommand = React.forwardRef<BottomSheetModal, Props>(
               : meter?.type === "gas"
               ? "Gaz"
               : "Suv"}
-            : {meter?.meter_number}
+            : {meter?.serial_number}
           </Text>
           <TouchableOpacity onPress={closeSheet} style={styles.closeBtn}>
             <AntDesign name="close" size={24} color={theme.text} />
@@ -83,26 +108,26 @@ export const SentCommand = React.forwardRef<BottomSheetModal, Props>(
             onValueChange={setCommand}
             buttons={[
               {
-                value: "on",
-                label: "Yoqish",
+                value: "open",
+                label: "Ochish",
                 style: {
                   backgroundColor:
-                    command === "on" ? Colors.primary : "transparent",
+                    command === "open" ? Colors.primary : "transparent",
                   borderColor: Colors.primary,
                 },
                 checkedColor: "white",
                 uncheckedColor: theme.text,
               },
               {
-                value: "off",
-                label: "O'chirish",
+                value: "close",
+                label: "Yopish",
                 style: {
                   backgroundColor:
-                    command === "off" ? theme.surface : "transparent",
-                  borderColor: theme.border,
+                    command === "close" ? Colors.primary : "transparent",
+                  borderColor: Colors.primary,
                 },
-                checkedColor: theme.text,
-                uncheckedColor: theme.text,
+                checkedColor: "white",
+                uncheckedColor: Colors.primary,
               },
             ]}
             style={styles.segmentedBtn}
@@ -115,7 +140,8 @@ export const SentCommand = React.forwardRef<BottomSheetModal, Props>(
             items={[
               { label: "1 kun", value: "1" },
               { label: "3 kun", value: "3" },
-              { label: "1 hafta", value: "7" },
+              { label: "7 kun", value: "7" },
+              { label: "30 kun", value: "30" },
             ]}
           />
 
@@ -141,6 +167,7 @@ export const SentCommand = React.forwardRef<BottomSheetModal, Props>(
             onPress={handleSubmit}
             style={styles.submitBtn}
             contentStyle={{ height: 48 }}
+            loading={isPending}
           >
             Jo'natish
           </Button>

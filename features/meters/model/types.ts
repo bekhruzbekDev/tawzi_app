@@ -51,3 +51,41 @@ export interface MeterDetail {
   is_solar_panel:boolean
   is_main:boolean
 }
+
+export interface SendCommandValues {
+ device_type: "electric" | "gas" | "water" |null,
+    device_id: number,
+    timeout_min: string,
+    comment:string|null
+}
+
+
+export interface GetDeviceCommandsRes {
+  data: GetDeviceCommand[]
+  success: boolean,
+  total_pages: number
+}
+
+export interface GetDeviceCommand {
+  date: string
+  changes: Change[]
+}
+
+export interface Change {
+  id: number
+  created_by_user: string
+  device: string
+  device_type: string
+  command_str: string
+  comment: string
+  command_status: CommandStatus
+  button_status: string
+  created_at: string
+}
+
+export interface CommandStatus {
+  status: string
+  days: number
+  hours: number
+  minutes: number
+}

@@ -1,7 +1,7 @@
 import { Meter } from "@/features/meters/model/types";
 import { MeterDetail } from "@/features/meters/ui/meter-detail";
 import MetersList from "@/features/meters/ui/meters-list";
-import { SentCommand } from "@/features/meters/ui/sent-command";
+import { SendCommand } from "@/features/meters/ui/sent-command";
 import { ConsumersHeader } from "@/features/organization/ui/consumers/consumer-header";
 import { Colors } from "@/shared/constants/theme";
 import { useThemeColors } from "@/shared/hooks/use-theme";
@@ -23,7 +23,7 @@ export default function Meters() {
 
   const handleCommandPress = (meter: Meter) => {
     setSelectedMeter(meter);
-    commandSheetRef.current?.present();
+    commandSheetRef.current?.present(2);
   };
 
   const handleDetailPress = (meter: Meter) => {
@@ -51,7 +51,7 @@ export default function Meters() {
       </TouchableOpacity>
 
       {/* <CreateMeter ref={createSheetRef} /> */}
-      <SentCommand ref={commandSheetRef} meter={selectedMeter} />
+      <SendCommand ref={commandSheetRef} meter={selectedMeter} />
       <MeterDetail ref={detailSheetRef} meter={selectedMeter} />
     </>
   );
