@@ -26,7 +26,7 @@ export default function CreateMeterScreen() {
     }
     
    return (
-        <View style={styles.container}>
+        <View style={[styles.container,{backgroundColor:theme.background}]}>
             
                 <Pressable  onPress={() => router.back()} style={styles.backBtn}>
                     <Entypo name="chevron-small-left" size={24} color={theme.text} />
@@ -48,7 +48,8 @@ export default function CreateMeterScreen() {
 const styles = StyleSheet.create({
     container:{
     paddingHorizontal:20,
-    paddingTop:16
+    paddingTop:16,
+    flex:1
     },
     backBtn:{
         alignSelf:"flex-start",
