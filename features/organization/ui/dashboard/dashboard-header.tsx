@@ -16,9 +16,9 @@ export const OrgDashboardHeader = ({unitType, setUnitType, deviceTypes}: Props) 
       <View style={styles.unitRow}>
 
         <View style={styles.unitPills}>
-          {deviceTypes.length >1&&  deviceTypes.map((data) => (
+          {deviceTypes.length >1&&  deviceTypes.map((data,i) => (
             <TouchableOpacity
-              key={data}
+              key={i}
               style={[
                 styles.unitPill,
                 unitType == data.toLowerCase()

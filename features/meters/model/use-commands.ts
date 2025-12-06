@@ -32,8 +32,14 @@ export const useCommands = (device_id:string|number,device_type:"electric" | "ga
     return page.data
   }) ?? [];
 
+      const sections = customData.map(sectionData => ({
+      title: formatDate(sectionData.date),
+      originalDate: sectionData.date,
+      data: sectionData.changes
+    }));
+
   return {
-    data:customData,
+    data:sections,
     isLoading,
     isFetching,
     fetchNextPage,
@@ -44,3 +50,27 @@ export const useCommands = (device_id:string|number,device_type:"electric" | "ga
     refetch,
   }
 } 
+
+
+  const formatDate = (dateString: string) => {
+      const today = new Date();
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+      
+      const [day, month, year] = dateString.split('-').map(Number);
+      const itemDate = new Date(year, month - 1, day);
+      
+      const isSameDay = (date1: Date, date2: Date) => {
+        return date1.getDate() === date2.getDate() &&
+               date1.getMonth() === date2.getMonth() &&
+               date1.getFullYear() === date2.getFullYear();
+      };
+      
+      if (isSameDay(itemDate, today)) {
+        return "Bugun";
+      } else if (isSameDay(itemDate, yesterday)) {
+        return "Kecha";
+      } else {
+        return dateString;
+      }
+    };

@@ -15,7 +15,6 @@ export default function Meters() {
   const theme = useThemeColors();
 
   const router = useRouter()
-  // const createSheetRef = useRef<BottomSheetModal | null>(null);
   const commandSheetRef = useRef<BottomSheetModal | null>(null);
   const detailSheetRef = useRef<BottomSheetModal | null>(null);
 
@@ -49,8 +48,6 @@ export default function Meters() {
       >
         <AntDesign name="plus" size={24} color={Colors.primary} />
       </TouchableOpacity>
-
-      {/* <CreateMeter ref={createSheetRef} /> */}
       <SendCommand ref={commandSheetRef} meter={selectedMeter} />
       <MeterDetail ref={detailSheetRef} meter={selectedMeter} />
     </>

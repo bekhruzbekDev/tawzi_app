@@ -71,13 +71,13 @@ export const MeterCard = ({ meter, onCommandPress, onDetailPress }: Props) => {
             </Text>
           </View>
         </View>
-        <View style={[styles.badge, { borderColor: theme.border }]}>
+        <View style={[styles.badge, { borderColor: Colors.primary }]}>
           <Ionicons
             name="checkmark-circle-outline"
             size={16}
-            color={theme.text}
+            color={Colors.primary}
           />
-          <Text style={[styles.badgeText, { color: theme.text }]}>Faol</Text>
+          <Text style={[styles.badgeText, { color: Colors.primary }]}>Faol</Text>
         </View>
       </View>
 
@@ -110,7 +110,7 @@ export const MeterCard = ({ meter, onCommandPress, onDetailPress }: Props) => {
           <MaterialCommunityIcons
             name="power"
             size={20}
-            color={theme.text}
+            color={"red"}
           />
         </TouchableOpacity>
       </View>
@@ -203,5 +203,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     alignItems: "center",
     justifyContent: "center",
+    borderColor:"red"
   },
 });

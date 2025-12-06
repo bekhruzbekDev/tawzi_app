@@ -68,10 +68,10 @@ export interface GetDeviceCommandsRes {
 
 export interface GetDeviceCommand {
   date: string
-  changes: Change[]
+  changes: CommandData[]
 }
 
-export interface Change {
+export interface CommandData {
   id: number
   created_by_user: string
   device: string
