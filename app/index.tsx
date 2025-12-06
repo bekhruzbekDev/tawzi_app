@@ -3,7 +3,7 @@ import { PageLoading } from "@/shared/ui/page-loader";
 import { Redirect } from "expo-router";
 
 export default function Index() {
-  const demo = true;
+  const demo = false;
   const { data, isLoading, isSuccess } = useAuth();
   if (demo) return <Redirect href={"/(tabs)/consumer/statistics"} />;
 
@@ -14,7 +14,7 @@ export default function Index() {
   }
 
   const roleRoutes: Record<string, string> = {
-    OrganizationAdmin: "/(tabs)/owner",
+    OrganizationAdmin: "/(tabs)/organization",
     Consumer: "/(tabs)/consumer",
     Employer: "/(tabs)/owner",
     owner: "/(tabs)/owner",

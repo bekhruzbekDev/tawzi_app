@@ -20,7 +20,7 @@ export const allRoutes: RoutesData[] = [
 
   // consumers
   {
-    id: "4",
+    id: "3",
     title: "Bosh sahifa",
     icon: "dashboard",
     path: "consumer/index",
@@ -28,7 +28,7 @@ export const allRoutes: RoutesData[] = [
     role: ["consumer"],
   },
   {
-    id: "5",
+    id: "4",
     title: "Statistika",
     icon: "pie-chart",
     path: "consumer/statistics",
@@ -37,16 +37,40 @@ export const allRoutes: RoutesData[] = [
   },
   // org
   {
-    id: "1",
-    title: "Organization",
-    icon: "",
+    id: "5",
+    title: "Bosh sahifa",
+    icon: "space-dashboard",
     path: "organization/index",
-    iconType: "Feather",
-    role: ["organization", "owner"],
+    iconType: "MaterialIcons",
+    role: ["organization",],
+  },
+  {
+    id: "6",
+    title: "Istemolchilar",
+    icon: "users",
+    path: "organization/consumers",
+    iconType: "FontAwesome",
+    role: ["organization",],
+  },
+   {
+    id: "9",
+    title: "Hisoblagichlar",
+    icon: "gas-meter",
+    path: "organization/meters",
+    iconType: "MaterialIcons",
+    role: ["organization", ],
   },
   // public
   {
-    id: "3",
+    id: "8",
+    title: "Bildirishnomalar",
+    icon: "notifications-sharp",
+    path: "public/notification",
+    iconType: "Ionicons",
+    role: ["owner", "consumer", "organization"],
+  },
+  {
+    id: "7",
     title: "profile",
     icon: "user",
     path: "public/profile",

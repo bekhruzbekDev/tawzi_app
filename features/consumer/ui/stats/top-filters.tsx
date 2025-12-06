@@ -1,4 +1,5 @@
 import { Colors } from "@/shared/constants/theme";
+import { useThemeColors } from "@/shared/hooks/use-theme";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface Props {
@@ -11,10 +12,11 @@ export default function ConsumerStatsTopFilter({
   unitType,
   change,
 }: Props) {
+  const theme = useThemeColors();
   return (
     <>
       <View style={styles.toggleRow}>
-        <View style={styles.segment}>
+        <View style={[styles.segment, { backgroundColor: theme.card }]}>
           <TouchableOpacity
             style={[
               styles.segmentBtn,
@@ -25,7 +27,12 @@ export default function ConsumerStatsTopFilter({
             <Text
               style={[
                 styles.segmentText,
-                toggleDay == "daily" && { color: "#fff" },
+
+                toggleDay == "daily"
+                  ? { color: "#fff" }
+                  : { color: theme.text },
+
+                ,
               ]}
             >
               День
@@ -41,7 +48,10 @@ export default function ConsumerStatsTopFilter({
             <Text
               style={[
                 styles.segmentText,
-                toggleDay == "monthly" && { color: "#fff" },
+                toggleDay == "monthly"
+                  ? { color: "#fff" }
+                  : { color: theme.text },
+                ,
               ]}
             >
               Месяц
@@ -99,6 +109,9 @@ const styles = StyleSheet.create({
     padding: 4,
     width: "100%",
     elevation: 2,
+    // shadowOpacity: 0.2,
+    // shadowRadius: 6,
+    // shadowOffset: { height: 3, width: 0 },
   },
   segmentBtn: {
     flex: 1,
@@ -110,7 +123,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#0ea5e9",
     shadowColor: "#0ea5e9",
   },
-  segmentText: { color: "#374151", fontSize: 14 },
+  segmentText: { fontSize: 14 },
   segmentActiveText: { color: "#fff", fontWeight: "600" },
 
   energyRow: {
