@@ -13,6 +13,37 @@ export const Colors = {
   secondary: "white",
 };
 
+export const ThemePalette = {
+  light: {
+    background: "#f1f1f1",
+    surface: "#ffffff",
+    card: "#ffffff",
+    text: "#0f172a",
+    muted: "#6b7280",
+    border: "#e5e7eb",
+    badge: "#06b6d4",
+    overlay: "rgba(15, 23, 42, 0.35)",
+    sheetHandle: "#e5e7eb",
+    shadow: "rgba(0,0,0,0.2)",
+    statusBarStyle: "dark" as const,
+  },
+  dark: {
+    background: "#0f172a",
+    surface: "#1f2937",
+    card: "#1e293b",
+    text: "#f8fafc",
+    muted: "#94a3b8",
+    border: "rgba(148, 163, 184, 0.4)",
+    badge: "#06b6d4",
+    overlay: "rgba(15, 23, 42, 0.75)",
+    sheetHandle: "#475569",
+    shadow: "rgba(0,0,0,0.6)",
+    statusBarStyle: "light" as const,
+  },
+};
+
+export type ThemeMode = keyof typeof ThemePalette;
+
 export const Fonts = Platform.select({
   ios: {
     /** iOS `UIFontDescriptorSystemDesignDefault` */
