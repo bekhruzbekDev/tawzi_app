@@ -1,20 +1,19 @@
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { useEffect } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated, {
   FadeIn,
   FadeOut,
   LinearTransition,
 } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { allRoutes } from "../constants/routes";
-import { Colors } from "../constants/theme";
 import { getIcon } from "../hooks/use-icon";
-import { useThemeColors } from "../hooks/use-theme";
 import { useStore } from "../store/store";
 
 const AnimatedTouchableOpacity =
   Animated.createAnimatedComponent(TouchableOpacity);
+
+const PRIMARY_COLOR = "white";
+const SECONDARY_COLOR = "#06b6d4";
 
 const CustomNavBar: React.FC<BottomTabBarProps> = ({
   state,
@@ -22,11 +21,6 @@ const CustomNavBar: React.FC<BottomTabBarProps> = ({
   navigation,
 }) => {
   const userData = useStore((state) => state.user);
-  const setTabBarInset = useStore((state) => state.setTabBarInset);
-  const { bottom: safeBottom } = useSafeAreaInsets();
-  const theme = useThemeColors();
-  const PRIMARY_COLOR = theme.surface;
-  const SECONDARY_COLOR = Colors.primary;
   const userRole = userData
     ? userData?.role == "Consumer"
       ? "consumer"
@@ -38,23 +32,8 @@ const CustomNavBar: React.FC<BottomTabBarProps> = ({
     : "";
   const routes = allRoutes.filter((item) => item.role.includes(userRole));
 
-  // useEffect(() => {
-  //   setTabBarInset(72 + safeBottom);
-  // }, [safeBottom, setTabBarInset]);
-
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          bottom: 10,
-          backgroundColor: PRIMARY_COLOR,
-          shadowColor: theme.shadow,
-          shadowOpacity: theme.isDarkMode ? 0.35 : 0.18,
-          elevation: theme.isDarkMode ? 0 : 10,
-        },
-      ]}
-    >
+    <View style={styles.container}>
       {state.routes.map((route, index) => {
         if (!routes.map((item) => item.path).includes(route.name)) return null;
 
@@ -102,7 +81,7 @@ const CustomNavBar: React.FC<BottomTabBarProps> = ({
               <Animated.Text
                 entering={FadeIn.duration(200)}
                 exiting={FadeOut.duration(200)}
-                style={[styles.text, { color: PRIMARY_COLOR }]}
+                style={styles.text}
               >
                 {label as string}
               </Animated.Text>
@@ -118,15 +97,19 @@ const styles = StyleSheet.create({
   container: {
     position: "absolute",
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
+    backgroundColor: PRIMARY_COLOR,
     width: "95%",
     alignSelf: "center",
+    bottom: 10,
     borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 15,
-    shadowOffset: { width: 0, height: 12 },
-    shadowRadius: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
   },
   tabItem: {
     flexDirection: "row",
@@ -137,6 +120,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
   },
   text: {
+    color: PRIMARY_COLOR,
     marginLeft: 8,
     fontWeight: "500",
   },

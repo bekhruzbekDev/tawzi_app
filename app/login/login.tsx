@@ -1,16 +1,13 @@
 import { useLogin } from "@/features/login/model/use-login";
 import LoginForm from "@/features/login/ui/auth-form";
-import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 export default function LoginScreen() {
   const { submitData, loading } = useLogin();
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
+    <View style={styles.container}>
       <LoginForm submit={submitData} loading={loading} />
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 
