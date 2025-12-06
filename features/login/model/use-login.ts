@@ -14,6 +14,8 @@ export const useLogin = () => {
     mutationFn: (data: LoginFormData) => loginMutation(data),
     mutationKey: ["login-mutation"],
     onSuccess: (data: LoginDataRes) => {
+      console.log({ data });
+
       AsyncStorage.setItem("access_token", data.access_token);
       AsyncStorage.setItem("refresh_token", data.refresh_token);
       setUser(data?.user);
