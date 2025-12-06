@@ -16,6 +16,7 @@ export const useAuth = () => {
 
   useEffect(() => {
     if (!isLoading && isSuccess) {
+      console.log({ test: data.data });
 
       setUSerData(data?.data);
     }

@@ -1,4 +1,3 @@
-import { useThemeColors } from "@/shared/hooks/use-theme";
 import React, { useMemo } from "react";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import { BarChart } from "react-native-gifted-charts";
@@ -8,7 +7,8 @@ interface Props {
 }
 export default function ConsumerDataChart(props: Props) {
   const { data } = props;
-  const theme = useThemeColors();
+
+  // --- Bu logikalar o'zgarishsiz qoladi, ular to'g'ri ---
   const { maxValue, noOfSections, stepValue } = useMemo(() => {
     const maxVal = Math.max(...data.map((item) => item.value));
     const calculatedStep = Math.ceil(maxVal / 5 / 100) * 100;
@@ -36,7 +36,7 @@ export default function ConsumerDataChart(props: Props) {
   // --- Logika tugadi ---
 
   return (
-    <View style={[styles.chartCard,{backgroundColor:theme.card,}]}>
+    <View style={styles.chartCard}>
       <Text style={styles.axisLabel}>кB</Text>
 
       <BarChart
@@ -75,20 +75,19 @@ export default function ConsumerDataChart(props: Props) {
   );
 }
 
+// Stillar (o'zgarishsiz)
 const styles = StyleSheet.create({
   chartCard: {
     width: "100%",
-    
+    backgroundColor: "#fff",
     borderRadius: 16,
     padding: 12,
     paddingBottom: 16,
     marginTop: 12,
     alignItems: "center",
-    shadowRadius: 8,
-    overflow: "hidden",
     shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowOffset: { height: 2, width: 0 },
+    shadowOpacity: 0.03,
+    shadowRadius: 8,
   },
   axisLabel: { alignSelf: "flex-start", color: "#6B7280", marginBottom: 4 },
   legendRow: {

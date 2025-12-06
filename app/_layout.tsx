@@ -1,6 +1,5 @@
 import { queryClient } from "@/services/query-client";
 import { Colors } from "@/shared/constants/theme";
-import { useThemeColors } from "@/shared/hooks/use-theme";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
@@ -16,28 +15,22 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   // const colorScheme = useColorScheme();
-  const themeColors = useThemeColors();
   const theme = {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
       primary: Colors.primary,
       secondary: Colors.secondary,
-      background: themeColors.background,
-      surface: themeColors.surface,
     },
   };
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: themeColors.background }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <QueryClientProvider client={queryClient}>
         <PaperProvider theme={theme}>
-          <GestureHandlerRootView
-            style={{ flex: 1, backgroundColor: themeColors.background }}
-          >
+          <GestureHandlerRootView style={{ flex: 1 }}>
             <BottomSheetModalProvider>
-              <Stack screenOptions={{ headerShown: false }}>
+              <Stack>
                 <Stack.Screen name="index" options={{ headerShown: false }} />
-                <Stack.Screen name="create-meter" options={{ headerShown: false }} />
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                 <Stack.Screen
                   name="login/login"
@@ -46,11 +39,7 @@ export default function RootLayout() {
               </Stack>
             </BottomSheetModalProvider>
           </GestureHandlerRootView>
-          <StatusBar
-            style={themeColors.statusBarStyle}
-            // backgroundColor={themeColors.background}
-          />
-          
+          <StatusBar style="dark" />
           <Toast />
         </PaperProvider>
       </QueryClientProvider>
