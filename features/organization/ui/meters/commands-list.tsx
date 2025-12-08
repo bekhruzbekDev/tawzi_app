@@ -2,8 +2,9 @@ import { Colors } from "@/shared/constants/theme";
 import { Feather } from "@expo/vector-icons";
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
-import { Meter } from "../model/types";
-import { useCommands } from "../model/use-commands";
+
+import { Meter } from "../../model/meters/types";
+import { useCommands } from "../../model/meters/use-commands";
 import { CommandCard } from "./command-card";
 
 interface CommandsListProps {

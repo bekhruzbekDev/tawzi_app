@@ -100,7 +100,7 @@ function OrganizationStatsList({ resourceType = "electric",data }: OrganizationS
         })}
       </ScrollView>
 
-      {/* Resurs yo'qotishlari Card - Below ScrollView */}
+
       <View style={styles.resourceLossContainer}>
         <LinearGradient
           colors={gradientColors}
@@ -112,7 +112,7 @@ function OrganizationStatsList({ resourceType = "electric",data }: OrganizationS
             <View style={styles.textContainer}>
               <Text style={styles.gradientCardTitle}>Resurs yo'qotishlari</Text>
               <Text style={styles.gradientCardLabel}>{resourceLabel}</Text>
-              <Text style={styles.gradientCardValue}>{data.losses}</Text>
+              <Text style={styles.gradientCardValue}>{data.losses.slice(0,5)+" slice "}</Text>
             </View>
             <View style={styles.iconContainer}>
               <Ionicons name={iconName as any} size={32} color="rgba(255, 255, 255, 0.9)" />

@@ -16,6 +16,7 @@ import { useConsumersData } from "../../model/consumers/use-consumers";
 
 
 
+import { useRouter } from "expo-router";
 import { Consumer } from "../../model/consumers/types";
 import { ConsumerSkeleton } from "./consumer-skeleton";
 
@@ -26,6 +27,7 @@ interface Props {
 
 export const ConsumesList = (props:Props) => {
   const {editChange,deleteChange}=props
+  const router = useRouter()
   const {
     customData,
     isLoading,
@@ -50,7 +52,7 @@ export const ConsumesList = (props:Props) => {
     <FlatList
       data={customData}
       keyExtractor={(item) => item.id.toString()}
-      renderItem={({ item }) => <Card consumer={item} onEdit={(e)=>editChange(item)} onDelete={(e)=>deleteChange(item)}/>}
+      renderItem={({ item }) => <Card consumer={item} onEdit={(e)=>editChange(item)} onDelete={(e)=>deleteChange(item)} navigateToDetail={(e)=>router.push(`/detail`)}/>}
       ListEmptyComponent={
         <View style={{ padding: 20, alignItems: "center" }}>  
           <Text>Ma'lumot topilmadi</Text>
@@ -78,14 +80,15 @@ type CardProps = {
   consumer: Consumer;
   onEdit?: (e: Consumer) => void;
   onDelete?: (e: Consumer) => void;
+  navigateToDetail?: (e: Consumer) => void;
 };
 
-const Card = ({ consumer, onEdit, onDelete, }: CardProps) => {
+const Card = ({ consumer, onEdit, onDelete, navigateToDetail }: CardProps) => {
   const theme = useThemeColors();
 
   return (
     <Pressable
-      style={[
+      style={[  
         styles.card,
         {
           backgroundColor: theme.card,
@@ -93,6 +96,7 @@ const Card = ({ consumer, onEdit, onDelete, }: CardProps) => {
           shadowColor: theme.shadow ?? "#000",
         },
       ]}
+      onPress={()=>navigateToDetail?.(consumer)}
       android_ripple={{ color: theme.surface ?? "#eee" }}
     >
       {/* Header: title + actions */}

@@ -3,7 +3,7 @@ import { useThemeColors } from "@/shared/hooks/use-theme";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Meter } from "../model/types";
+import { Meter } from "../../model/meters/types";
 
 interface Props {
   meter: Meter;

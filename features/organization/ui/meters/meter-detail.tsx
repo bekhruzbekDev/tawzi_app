@@ -8,8 +8,8 @@ import {
 import { useRouter } from "expo-router";
 import React, { useCallback, useMemo, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Meter } from "../model/types";
 import { CommandsList } from "./commands-list";
+import { Meter } from "../../model/meters/types";
 
 interface Props {
   meter: Meter | null;

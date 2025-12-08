@@ -9,7 +9,7 @@ import { Controller, useForm } from "react-hook-form";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Button, RadioButton } from "react-native-paper";
 import { z } from "zod";
-import { CreateMeterValues, MeterDetail } from "../model/types";
+import { CreateMeterValues, MeterDetail } from "../../model/meters/types";
 
 const meterSchema = z.object({
   meter_number: z.string().min(3, "Kamida 3 ta belgi bo'lishi kerak"),

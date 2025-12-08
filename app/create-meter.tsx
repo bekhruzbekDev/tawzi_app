@@ -1,6 +1,7 @@
-import { CreateMeterValues } from "@/features/meters/model/types";
-import { useCreateMeter } from "@/features/meters/model/use-create-meter";
-import { MeterForm } from "@/features/meters/ui/meter-form";
+
+import { CreateMeterValues } from "@/features/organization/model/meters/types";
+import { useCreateMeter } from "@/features/organization/model/meters/use-create-meter";
+import { MeterForm } from "@/features/organization/ui/meters/meter-form";
 import { useThemeColors } from "@/shared/hooks/use-theme";
 
 import Entypo from '@expo/vector-icons/Entypo';

@@ -7,6 +7,13 @@ export interface Meter {
   meter_direction: string;
 }
 
+export interface MeterFilters {
+  device_type?: string;
+  device_meter_direction?: string;
+  status?: string;
+  search?: string;
+}
+
 export interface Stats {
   total: number;
   active: number;

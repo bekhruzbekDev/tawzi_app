@@ -1,23 +1,28 @@
 import React from "react";
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
-import { Meter } from "../model/types";
-import { useMetersData } from "../model/use-meters";
+import { useMetersData } from "../../model/meters/use-meters";
 import { MeterCard } from "./meter-card";
 import { MeterSkeleton } from "./meter-skeleton";
+import { Meter, MeterFilters } from "../../model/meters/types";
 
 interface Props {
   onCommandPress?: (meter: Meter) => void;
   onDetailPress?: (meter: Meter) => void;
+  filters?: MeterFilters;
 }
 
-export default function MetersList({ onCommandPress, onDetailPress }: Props) {
+export default function MetersList({
+  onCommandPress,
+  onDetailPress,
+  filters,
+}: Props) {
   const {
     customData,
     isLoading,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useMetersData();
+  } = useMetersData(filters);
 
   if (isLoading) {
     return (

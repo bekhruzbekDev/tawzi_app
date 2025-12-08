@@ -3,9 +3,9 @@ import { useThemeColors } from "@/shared/hooks/use-theme";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Button } from "react-native-paper";
-import { CommandData } from "../model/types";
+import { CommandData } from "../../model/meters/types";
 
-export const CommandCard = React.memo(({ item }: { item: CommandData }) => {
+export const CommandCard = React.memo(({ item }: { item: CommandData}) => {
     const theme = useThemeColors();
     
     const getCommandText = (commandStr: string) => {

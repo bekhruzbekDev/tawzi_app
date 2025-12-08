@@ -12,8 +12,8 @@ import React, { useCallback, useMemo, useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Button, SegmentedButtons } from "react-native-paper";
 import Toast from "react-native-toast-message";
-import { sendCommandMutation } from "../model/mutations";
-import { Meter, SendCommandValues } from "../model/types";
+import { sendCommandMutation } from "../../model/meters/mutations";
+import { Meter, SendCommandValues } from "../../model/meters/types";
 
 interface Props {
   meter: Meter | null;
