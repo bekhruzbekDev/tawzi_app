@@ -1,44 +1,50 @@
 import { Colors } from "@/shared/constants/theme";
 import { useThemeColors } from "@/shared/hooks/use-theme";
 import { Ionicons } from "@expo/vector-icons";
-
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useRouter } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface Props {
-    unitType: string;
-    setUnitType: (unitType: string) => void;
-    deviceTypes: string[];
+  unitType: string;
+  setUnitType: (unitType: string) => void;
+  deviceTypes: string[];
 }
-export const OrgDashboardHeader = ({unitType, setUnitType, deviceTypes}: Props) => {
+export const OrgDashboardHeader = ({
+  unitType,
+  setUnitType,
+  deviceTypes,
+}: Props) => {
+  const router = useRouter();
   const theme = useThemeColors();
   return (
     <View style={styles.container}>
       <View style={styles.unitRow}>
-
         <View style={styles.unitPills}>
-          {deviceTypes.length >1&&  deviceTypes.map((data,i) => (
-            <TouchableOpacity
-              key={i}
-              style={[
-                styles.unitPill,
-                unitType == data.toLowerCase()
-                  ? { backgroundColor: Colors.primary }
-                  : { backgroundColor: theme.card },
-              ]}
-              onPress={() => setUnitType(data.toLocaleLowerCase())}
-            >
-              <Text
+          {deviceTypes.length > 1 &&
+            deviceTypes.map((data, i) => (
+              <TouchableOpacity
+                key={i}
                 style={[
-                  styles.unitText,
-                  unitType == data.toLowerCase() && { color: "#fff" },
+                  styles.unitPill,
+                  unitType == data.toLowerCase()
+                    ? { backgroundColor: Colors.primary }
+                    : { backgroundColor: theme.card },
                 ]}
+                onPress={() => setUnitType(data.toLocaleLowerCase())}
               >
-                {data}
-              </Text>
-            </TouchableOpacity>
-          ))}
+                <Text
+                  style={[
+                    styles.unitText,
+                    unitType == data.toLowerCase() && { color: "#fff" },
+                  ]}
+                >
+                  {data}
+                </Text>
+              </TouchableOpacity>
+            ))}
         </View>
-        <View style={{ position: "relative" }}>
+        <View style={{ position: "relative", flexDirection: "row", gap: 16 }}>
           <View
             style={[
               styles.notificationData,
@@ -47,6 +53,7 @@ export const OrgDashboardHeader = ({unitType, setUnitType, deviceTypes}: Props) 
           >
             <Text style={{ fontSize: 12, color: "white" }}>2</Text>
           </View>
+          <FontAwesome name="user" size={30} color={Colors.primary} onPress={() => router.push("/(tabs)/public/profile")}/>
           <Ionicons name="notifications" size={30} color={theme.text} />
         </View>
       </View>
