@@ -1,22 +1,27 @@
+import { DateFilterSheet } from "@/features/organization/ui/consumers/date-filter-sheet";
 import { Colors } from "@/shared/constants/theme";
 import { useThemeColors } from "@/shared/hooks/use-theme";
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import { useRouter } from "expo-router";
-import { useRef, useState } from "react";
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { DateFilterSheet } from "./date-filter-sheet";
+import { useRef } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-export const ConsumerDetailHeader = () => {
-  const [unitType, setUnitType] = useState<"monthly" | "yearly">("monthly");
+interface FinanceHeaderProps {
+  unitType: "monthly" | "yearly";
+  setUnitType: (type: "monthly" | "yearly") => void;
+  date: Date;
+  setDate: (date: Date) => void;
+}
+
+export const FinanceHeader = ({
+  unitType,
+  setUnitType,
+  date,
+  setDate,
+}: FinanceHeaderProps) => {
+  const theme = useThemeColors();
   const bottomSheetRef = useRef<BottomSheetModal>(null);
-  const [date, setDate] = useState(new Date());
+
   const filterData = [
     {
       label: "Oylik",
@@ -28,10 +33,6 @@ export const ConsumerDetailHeader = () => {
     },
   ];
 
-  const handleDateChange = (newDate: Date) => {
-    setDate(newDate);
-  };
-
   const formattedDate =
     unitType === "monthly"
       ? `${date.toLocaleDateString("uz-UZ", {
@@ -39,17 +40,12 @@ export const ConsumerDetailHeader = () => {
         })} - ${date.getFullYear()}`
       : `${date.getFullYear()}`;
 
-  const router = useRouter();
-  const theme = useThemeColors();
   return (
     <View style={styles.header}>
       <View style={[styles.flex, { marginBottom: 16 }]}>
-        <Pressable
-          onPress={() => router.back()}
-          style={[styles.backBtn, { backgroundColor: theme.card }]}
-        >
-          <Feather name="chevron-left" size={24} color={theme.text} />
-        </Pressable>
+        <Text style={[styles.headerTitle, { color: theme.text }]}>
+          Hisob-kitob
+        </Text>
         <View style={styles.unitPills}>
           {filterData.map((data, i) => (
             <TouchableOpacity
@@ -76,9 +72,9 @@ export const ConsumerDetailHeader = () => {
       </View>
 
       <View style={styles.flex}>
-        <Text style={[styles.headerTitle, { color: theme.text }]}>
-          1 - Tashkilot
-        </Text>
+        <View />
+        {/* Spacer or left content if needed, keeping date on right/center logic or layout */}
+
         <TouchableOpacity
           onPress={() => bottomSheetRef.current?.present()}
           style={{
@@ -98,13 +94,15 @@ export const ConsumerDetailHeader = () => {
           />
         </TouchableOpacity>
       </View>
+
       <DateFilterSheet
         ref={bottomSheetRef}
         unitType={unitType}
         value={date}
-        onChange={handleDateChange}
-        minDate={new Date(2024, 8, 1)} // Set to September 1, 2025 as per request
-        maxDate={new Date()} // Current date
+        onChange={setDate}
+        // Mock constraints
+        minDate={new Date(2024, 0, 1)}
+        maxDate={new Date()}
       />
     </View>
   );
@@ -112,22 +110,16 @@ export const ConsumerDetailHeader = () => {
 
 const styles = StyleSheet.create({
   header: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingBottom: 16,
   },
   flex: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
-  backBtn: {
-    padding: 6,
-    paddingHorizontal: 16,
-    borderRadius: 12,
-  },
   headerTitle: {
-    fontSize: 18,
-    fontWeight: "600",
+    fontSize: 28,
+    fontWeight: "700",
   },
   unitPills: { flexDirection: "row", alignItems: "center", gap: 8 },
   unitPill: {

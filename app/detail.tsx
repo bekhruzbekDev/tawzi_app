@@ -1,13 +1,17 @@
 import ConsumptionChart from "@/features/organization/ui/consumers/consumption-chart";
 import { ConsumerDetailHeader } from "@/features/organization/ui/consumers/detail-header";
 import DetailMeterValues from "@/features/organization/ui/consumers/detail-meter-values";
+import { PaymentSheet } from "@/features/organization/ui/consumers/payment-sheet";
+import { Colors } from "@/shared/constants/theme";
 import { useThemeColors } from "@/shared/hooks/use-theme";
-import { useRouter } from "expo-router";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { useRef } from "react";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function DetailScreen() {
-  const router = useRouter();
   const theme = useThemeColors();
+  const paymentSheetRef = useRef<BottomSheetModal>(null);
 
   // Mock Data for Charts
   const electricData = [
@@ -48,57 +52,100 @@ export default function DetailScreen() {
   ];
 
   return (
-    <ScrollView
-      style={[styles.container, { backgroundColor: theme.background }]}
-      contentContainerStyle={{ paddingBottom: 40 }}
-      showsVerticalScrollIndicator={false}
-      stickyHeaderIndices={[0]}
-    >
-      <View style={[{ backgroundColor: theme.background }]}>
-        <ConsumerDetailHeader />
-      </View>
+    <View style={{ flex: 1, backgroundColor: theme.background }}>
+      <ScrollView
+        style={[styles.container, { backgroundColor: theme.background }]}
+        contentContainerStyle={{ paddingBottom: 100 }} // Extra padding for FAB
+        showsVerticalScrollIndicator={false}
+        stickyHeaderIndices={[0]}
+      >
+        <View style={[{ backgroundColor: theme.background }]}>
+          <ConsumerDetailHeader />
+        </View>
 
-      <View style={{ paddingHorizontal: 16 }}>
-        <DetailMeterValues />
+        <View style={{ paddingHorizontal: 16 }}>
+          <DetailMeterValues />
 
-        <View style={{ height: 24 }} />
+          <View style={{ height: 24 }} />
 
-        <ConsumptionChart
-          title="Elektr"
-          value="450 000 UZS"
-          subValue="2 450 kW"
-          icon="lightning-bolt"
-          color="#f59e0b"
-          bgColor="#fffbeb"
-          data={electricData}
-        />
+          <ConsumptionChart
+            title="Elektr"
+            value="450 000 UZS"
+            subValue="2 450 kW"
+            icon="lightning-bolt"
+            color="#f59e0b"
+            bgColor="#fffbeb"
+            data={electricData}
+          />
 
-        <ConsumptionChart
-          title="Gaz"
-          value="35 000 UZS"
-          subValue="90 m³"
-          icon="fire"
-          color="#f97316"
-          bgColor="#fff7ed"
-          data={gasData}
-        />
+          <ConsumptionChart
+            title="Gaz"
+            value="35 000 UZS"
+            subValue="90 m³"
+            icon="fire"
+            color="#f97316"
+            bgColor="#fff7ed"
+            data={gasData}
+          />
 
-        <ConsumptionChart
-          title="Suv"
-          value="120 000 UZS"
-          subValue="120 m³"
-          icon="water-outline"
-          color="#3b82f6"
-          bgColor="#eff6ff"
-          data={waterData}
-        />
-      </View>
-    </ScrollView>
+          <ConsumptionChart
+            title="Suv"
+            value="120 000 UZS"
+            subValue="120 m³"
+            icon="water-outline"
+            color="#3b82f6"
+            bgColor="#eff6ff"
+            data={waterData}
+          />
+        </View>
+      </ScrollView>
+
+      {/* Floating Action Button */}
+      <Pressable
+        style={({ pressed }) => [
+          styles.fab,
+          {
+            backgroundColor: Colors.primary,
+            opacity: pressed ? 0.8 : 1,
+            shadowColor: theme.shadow,
+          },
+        ]}
+        onPress={() => paymentSheetRef.current?.present()}
+      >
+        <Ionicons name="wallet-outline" size={24} color="white" />
+        <Text style={styles.fabText}>To'lov</Text>
+      </Pressable>
+
+      <PaymentSheet ref={paymentSheetRef} />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  fab: {
+    position: "absolute",
+    bottom: 24,
+    right: 24,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    paddingHorizontal: 20,
+    paddingVertical: 14,
+    borderRadius: 30,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
+  },
+  fabText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "600",
   },
 });

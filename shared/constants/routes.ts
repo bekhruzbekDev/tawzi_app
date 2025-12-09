@@ -42,7 +42,7 @@ export const allRoutes: RoutesData[] = [
     icon: "space-dashboard",
     path: "organization/index",
     iconType: "MaterialIcons",
-    role: ["organization",],
+    role: ["organization"],
   },
   {
     id: "6",
@@ -50,25 +50,41 @@ export const allRoutes: RoutesData[] = [
     icon: "users",
     path: "organization/consumers",
     iconType: "FontAwesome",
-    role: ["organization",],
+    role: ["organization"],
   },
-   {
+  {
     id: "9",
     title: "Hisoblagichlar",
     icon: "gas-meter",
     path: "organization/meters",
     iconType: "MaterialIcons",
-    role: ["organization", ],
+    role: ["organization"],
+  },
+  {
+    id: "111",
+    title: "Hisob kitob",
+    icon: "wallet-outline",
+    path: "organization/finance",
+    iconType: "Ionicons",
+    role: ["organization"],
+  },
+  {
+    id: "112",
+    title: "Hodimlar",
+    icon: "users-cog",
+    path: "organization/employees",
+    iconType: "FontAwesome5",
+    role: ["organization"],
   },
   // public
-  {
-    id: "8",
-    title: "Bildirishnomalar",
-    icon: "notifications-sharp",
-    path: "public/notification",
-    iconType: "Ionicons",
-    role: ["owner", "consumer", "organization"],
-  },
+  // {
+  //   id: "8"
+  //   title: "Bildirishnomalar",
+  //   icon: "notifications-sharp",
+  //   path: "public/notification",
+  //   iconType: "Ionicons",
+  //   role: ["owner", "consumer", "organization"],
+  // },
   {
     id: "7",
     title: "profile",
