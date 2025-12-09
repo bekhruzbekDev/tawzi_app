@@ -13,13 +13,32 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 export default function ConsumersScreen() {
   const theme = useThemeColors();
 
-  const { consumer, sheetRef, editChange, deleteChange,deleteModalVisible,setDeleteModalVisible,setConsumer } = useConsumerActions();
+  const {
+    consumer,
+    sheetRef,
+    editChange,
+    deleteChange,
+    deleteModalVisible,
+    setDeleteModalVisible,
+    setConsumer,
+    activeFilter,
+    onFilterSelect,
+    filterCount,
+  } = useConsumerActions();
 
   return (
     <>
-      <ConsumersHeader />
+      <ConsumersHeader
+        activeFilter={activeFilter}
+        onFilterSelect={onFilterSelect}
+        filterOptions={[
+          { label: "Ogohlantirilganlar", value: "is_notified" },
+          { label: "Qarzdorlar", value: "is_debtor" },
+        ]}
+        filterCount={filterCount}
+      />
       <View style={{ flex: 1, paddingHorizontal: 16 }}>
-        <ConsumesList editChange={editChange} deleteChange={deleteChange}/>
+        <ConsumesList editChange={editChange} deleteChange={deleteChange} />
       </View>
 
       <TouchableOpacity
@@ -27,13 +46,20 @@ export default function ConsumersScreen() {
           styles.addBtn,
           { backgroundColor: theme.surface, shadowColor: theme.shadow },
         ]}
-        onPress={() => {sheetRef.current?.snapToIndex(1);setConsumer(null)}}
+        onPress={() => {
+          sheetRef.current?.snapToIndex(1);
+          setConsumer(null);
+        }}
       >
         <AntDesign name="plus" size={24} color={Colors.primary} />
       </TouchableOpacity>
 
       <CreateConsumer ref={sheetRef} consumer={consumer} />
-      <DeleteModal visible={deleteModalVisible} onchange={setDeleteModalVisible} queryKey="get-consumers"/>
+      <DeleteModal
+        visible={deleteModalVisible}
+        onchange={setDeleteModalVisible}
+        queryKey="get-consumers"
+      />
     </>
   );
 }
