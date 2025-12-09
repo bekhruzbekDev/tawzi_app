@@ -17,10 +17,27 @@ if (Platform.OS === "android") {
   }
 }
 
-export default function DetailMeterValues() {
+interface MeterAccordionData {
+  id: number;
+  name: string;
+  totalUnit: string;
+  icon: string;
+  color: string;
+  bg: string;
+  subMeters: {
+    id: number;
+    serial: string;
+    value: string;
+  }[];
+}
+
+interface DetailMeterValuesProps {
+  data?: MeterAccordionData[];
+}
+export default function DetailMeterValues({ data }: DetailMeterValuesProps) {
   const theme = useThemeColors();
 
-  const data = [
+  const demo = [
     {
       id: 1,
       name: "Elektr",
@@ -52,12 +69,16 @@ export default function DetailMeterValues() {
       subMeters: [],
     },
   ];
+  const customData = data ? data : demo;
 
   return (
     <View style={[styles.container, { backgroundColor: theme.card }]}>
-      {data.map((item, index) => (
+      {customData.map((item, index) => (
         <View key={item.id}>
-          <MeterAccordion item={item} isLast={index === data.length - 1} />
+          <MeterAccordion
+            item={item}
+            isLast={index === customData.length - 1}
+          />
         </View>
       ))}
     </View>

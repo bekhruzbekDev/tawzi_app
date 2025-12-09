@@ -7,7 +7,7 @@ import { BarChart } from "react-native-gifted-charts";
 type Props = {
   title: string;
   value: string;
-  subValue: string;
+  subValue?: string;
   icon: keyof typeof MaterialCommunityIcons.glyphMap;
   color: string;
   bgColor: string;
@@ -62,7 +62,11 @@ export default function ConsumptionChart({
           </View>
           <View>
             <Text style={[styles.value, { color: theme.text }]}>{value}</Text>
-            <Text style={[styles.subValue, { color: color }]}>{subValue}</Text>
+            {subValue && (
+              <Text style={[styles.subValue, { color: color }]}>
+                {subValue}
+              </Text>
+            )}
           </View>
         </View>
         <View style={styles.headerRight}>
@@ -96,7 +100,7 @@ export default function ConsumptionChart({
           // gifted-charts supports `yAxisLabelContainerStyle`.
           // For now standard left is safer for implementation speed.
           hideYAxisText={false}
-          yAxisLabelSuffix={subValue.includes("m") ? "m³" : ""}
+          yAxisLabelSuffix={subValue?.includes("m") ? "m³" : ""}
           maxValue={maxValue}
         />
       </View>

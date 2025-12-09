@@ -9,33 +9,31 @@ import {
   Pressable,
   StyleSheet,
   Text,
-  View
+  View,
 } from "react-native";
 import { useConsumersData } from "../../model/consumers/use-consumers";
-
-
-
 
 import { useRouter } from "expo-router";
 import { Consumer } from "../../model/consumers/types";
 import { ConsumerSkeleton } from "./consumer-skeleton";
 
 interface Props {
-    editChange: (e: Consumer | null) => void;
-    deleteChange: (e: Consumer | null) => void;
-} 
+  editChange: (e: Consumer | null) => void;
+  deleteChange: (e: Consumer | null) => void;
+  activeFilter: "is_notified" | "is_debtor" | null;
+  searchValue: string;
+}
 
-export const ConsumesList = (props:Props) => {
-  const {editChange,deleteChange}=props
-  const router = useRouter()
+export const ConsumesList = (props: Props) => {
+  const { editChange, deleteChange, activeFilter, searchValue } = props;
+  const router = useRouter();
   const {
     customData,
     isLoading,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useConsumersData();
-
+  } = useConsumersData(activeFilter, searchValue);
 
   if (isLoading) {
     return (
@@ -47,14 +45,20 @@ export const ConsumesList = (props:Props) => {
     );
   }
 
-
   return (
     <FlatList
       data={customData}
       keyExtractor={(item) => item.id.toString()}
-      renderItem={({ item }) => <Card consumer={item} onEdit={(e)=>editChange(item)} onDelete={(e)=>deleteChange(item)} navigateToDetail={(e)=>router.push(`/detail`)}/>}
+      renderItem={({ item }) => (
+        <Card
+          consumer={item}
+          onEdit={(e) => editChange(item)}
+          onDelete={(e) => deleteChange(item)}
+          navigateToDetail={(e) => router.push(`/detail`)}
+        />
+      )}
       ListEmptyComponent={
-        <View style={{ padding: 20, alignItems: "center" }}>  
+        <View style={{ padding: 20, alignItems: "center" }}>
           <Text>Ma'lumot topilmadi</Text>
         </View>
       }
@@ -88,7 +92,7 @@ const Card = ({ consumer, onEdit, onDelete, navigateToDetail }: CardProps) => {
 
   return (
     <Pressable
-      style={[  
+      style={[
         styles.card,
         {
           backgroundColor: theme.card,
@@ -96,7 +100,7 @@ const Card = ({ consumer, onEdit, onDelete, navigateToDetail }: CardProps) => {
           shadowColor: theme.shadow ?? "#000",
         },
       ]}
-      onPress={()=>navigateToDetail?.(consumer)}
+      onPress={() => navigateToDetail?.(consumer)}
       android_ripple={{ color: theme.surface ?? "#eee" }}
     >
       {/* Header: title + actions */}
@@ -114,7 +118,7 @@ const Card = ({ consumer, onEdit, onDelete, navigateToDetail }: CardProps) => {
 
         <View style={styles.actions}>
           <Pressable
-            onPress={()=>onEdit?.(consumer)}
+            onPress={() => onEdit?.(consumer)}
             style={[
               styles.iconBtn,
               { backgroundColor: theme.surface, borderColor: theme.border },
@@ -128,7 +132,7 @@ const Card = ({ consumer, onEdit, onDelete, navigateToDetail }: CardProps) => {
           </Pressable>
 
           <Pressable
-            onPress={()=>onDelete?.(consumer)}
+            onPress={() => onDelete?.(consumer)}
             style={[
               styles.iconBtn,
               { backgroundColor: theme.surface, borderColor: theme.border },

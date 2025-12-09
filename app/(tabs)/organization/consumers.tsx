@@ -24,6 +24,8 @@ export default function ConsumersScreen() {
     activeFilter,
     onFilterSelect,
     filterCount,
+    searchValue,
+    setSearchValue,
   } = useConsumerActions();
 
   return (
@@ -36,9 +38,16 @@ export default function ConsumersScreen() {
           { label: "Qarzdorlar", value: "is_debtor" },
         ]}
         filterCount={filterCount}
+        value={searchValue}
+        onChange={setSearchValue}
       />
       <View style={{ flex: 1, paddingHorizontal: 16 }}>
-        <ConsumesList editChange={editChange} deleteChange={deleteChange} />
+        <ConsumesList
+          editChange={editChange}
+          deleteChange={deleteChange}
+          activeFilter={activeFilter}
+          searchValue={searchValue}
+        />
       </View>
 
       <TouchableOpacity

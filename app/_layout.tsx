@@ -37,9 +37,16 @@ export default function RootLayout() {
             <BottomSheetModalProvider>
               <Stack screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="index" options={{ headerShown: false }} />
-                <Stack.Screen name="create-meter" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="create-meter"
+                  options={{ headerShown: false }}
+                />
                 <Stack.Screen name="detail" options={{ headerShown: false }} />
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="(tabs)/profile"
+                  options={{ headerShown: false }}
+                />
                 <Stack.Screen
                   name="login/login"
                   options={{ headerShown: false }}
@@ -51,7 +58,7 @@ export default function RootLayout() {
             style={themeColors.statusBarStyle}
             // backgroundColor={themeColors.background}
           />
-          
+
           <Toast />
         </PaperProvider>
       </QueryClientProvider>

@@ -5,6 +5,7 @@ import { Consumer } from "./types";
 export const useConsumerActions = () => {
   const sheetRef = useRef<BottomSheet | null>(null);
   const [consumer, setConsumer] = useState<Consumer | null>(null);
+  const [searchValue, setSearchValue] = useState<string>("");
   const [deleteModalVisible, setDeleteModalVisible] = useState<{
     open: boolean;
     path: string;
@@ -21,9 +22,11 @@ export const useConsumerActions = () => {
     });
   };
 
-  const [activeFilter, setActiveFilter] = useState<string | null>(null);
+  const [activeFilter, setActiveFilter] = useState<
+    "is_notified" | "is_debtor" | null
+  >(null);
 
-  const onFilterSelect = (val: string) => {
+  const onFilterSelect = (val: "is_notified" | "is_debtor") => {
     if (activeFilter === val) {
       setActiveFilter(null);
       console.log(null);
@@ -44,5 +47,7 @@ export const useConsumerActions = () => {
     activeFilter,
     onFilterSelect,
     filterCount: activeFilter ? 1 : 0,
+    searchValue,
+    setSearchValue,
   };
 };

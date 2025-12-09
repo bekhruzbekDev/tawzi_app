@@ -35,7 +35,22 @@ export const allRoutes: RoutesData[] = [
     iconType: "SimpleLineIcons",
     role: ["consumer"],
   },
-  // org
+  {
+    id: "45",
+    title: "Tarix",
+    icon: "history",
+    path: "consumer/history",
+    iconType: "AntDesign",
+    role: ["consumer"],
+  },
+  {
+    id: "7",
+    title: "profile",
+    icon: "user",
+    path: "public/profile",
+    iconType: "FontAwesome",
+    role: ["consumer"],
+  },
   {
     id: "5",
     title: "Bosh sahifa",
@@ -85,12 +100,12 @@ export const allRoutes: RoutesData[] = [
   //   iconType: "Ionicons",
   //   role: ["owner", "consumer", "organization"],
   // },
-  {
-    id: "7",
-    title: "profile",
-    icon: "user",
-    path: "public/profile",
-    iconType: "FontAwesome",
-    role: ["owner", "consumer", "organization"],
-  },
+  // {
+  //   id: "7",
+  //   title: "profile",
+  //   icon: "user",
+  //   path: "public/profile",
+  //   iconType: "FontAwesome",
+  //   role: ["owner", "consumer", "organization"],
+  // },
 ];

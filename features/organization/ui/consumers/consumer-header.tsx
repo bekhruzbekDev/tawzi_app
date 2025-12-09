@@ -7,8 +7,8 @@ import { Searchbar } from "react-native-paper";
 
 interface Props {
   onFilterPress?: () => void;
-  onFilterSelect?: (val: string) => void;
-  activeFilter?: string | null;
+  onFilterSelect?: (val: "is_notified" | "is_debtor") => void;
+  activeFilter?: "is_notified" | "is_debtor" | null;
   filterCount?: number;
   onChange?: (text: string) => void;
   value?: string;
@@ -81,7 +81,9 @@ export const ConsumersHeader = forwardRef<View, Props>(
                   <TouchableOpacity
                     style={styles.filterItem}
                     onPress={() => {
-                      onFilterSelect?.(option.value);
+                      onFilterSelect?.(
+                        option.value as "is_notified" | "is_debtor"
+                      );
                       setShowFilter(false);
                     }}
                   >
