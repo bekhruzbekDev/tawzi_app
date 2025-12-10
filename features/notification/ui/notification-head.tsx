@@ -1,5 +1,7 @@
 import { Colors } from "@/shared/constants/theme";
 import { useThemeColors } from "@/shared/hooks/use-theme";
+import { Feather } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { NotificationFilter } from "../model/types";
 
@@ -9,11 +11,24 @@ interface Props {
 }
 export default function NotificationHead({ filter, setFilter }: Props) {
   const theme = useThemeColors();
+  const router = useRouter();
   return (
     <View>
-      <Text style={[styles.title, { color: theme.text }]}>
-        Bildirishnomalar
-      </Text>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 24,
+          marginBottom: 20,
+        }}
+      >
+        <Pressable onPress={() => router.back()}>
+          <Feather name="chevron-left" size={24} color={theme.text} />
+        </Pressable>
+        <Text style={[styles.title, { color: theme.text }]}>
+          Bildirishnomalar
+        </Text>
+      </View>
       <View style={styles.filterRow}>
         {(["all", "unread", "read"] as NotificationFilter[]).map((item) => {
           const isActive = filter === item;
@@ -58,7 +73,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "600",
-    marginBottom: 16,
   },
   filterRow: {
     flexDirection: "row",

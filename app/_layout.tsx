@@ -45,6 +45,10 @@ export default function RootLayout() {
                   name="consumer-detail"
                   options={{ headerShown: false }}
                 />
+                <Stack.Screen
+                  name="notification"
+                  options={{ headerShown: false }}
+                />
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                 <Stack.Screen
                   name="(tabs)/profile"

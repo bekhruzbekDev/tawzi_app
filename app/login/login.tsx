@@ -21,4 +21,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 16,
   },
+  title: {
+    fontSize: 34,
+    fontWeight: "500",
+    marginBottom: 16,
+  },
 });

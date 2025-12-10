@@ -1,7 +1,8 @@
+import DynamicInput from "@/shared/ui/dynamic-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
-import { Controller, useForm } from "react-hook-form";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { useForm } from "react-hook-form";
+import { StyleSheet, View } from "react-native";
 import { Button } from "react-native-paper";
 import * as z from "zod";
 
@@ -34,44 +35,18 @@ export default function LoginForm({ submit, loading }: Props) {
     <>
       <View style={styles.form}>
         {/* Email Input */}
-        <Text style={styles.label}>Email</Text>
-        <Controller
+        <DynamicInput
           control={control}
           name="username"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              style={[styles.input, errors.username && styles.inputError]}
-              placeholder="username"
-              autoCapitalize="none"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-            />
-          )}
+          placeholder="Username"
         />
-        {errors.username && (
-          <Text style={styles.error}>{errors.username.message}</Text>
-        )}
 
-        {/* Password Input */}
-        <Text style={styles.label}>Password</Text>
-        <Controller
+        <DynamicInput
           control={control}
           name="password"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              style={[styles.input, errors.password && styles.inputError]}
-              placeholder="Password"
-              secureTextEntry
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-            />
-          )}
+          secureTextEntry
+          placeholder="Parol"
         />
-        {errors.password && (
-          <Text style={styles.error}>{errors.password.message}</Text>
-        )}
 
         <Button
           loading={loading}
@@ -103,6 +78,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 6,
     elevation: 5,
+    gap: 20,
   },
   label: {
     fontSize: 14,

@@ -47,7 +47,12 @@ export const OrgDashboardHeader = ({
             color={Colors.primary}
             onPress={() => router.push("/(tabs)/public/profile")}
           />
-          <Ionicons name="notifications" size={30} color={theme.text} />
+          <Ionicons
+            name="notifications"
+            size={30}
+            color={theme.text}
+            onPress={() => router.push("/notification")}
+          />
         </View>
       </View>
     </View>
