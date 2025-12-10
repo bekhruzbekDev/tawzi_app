@@ -2,19 +2,11 @@ import { CreateEmployeeSheet } from "@/features/organization/ui/employees/create
 import EmployeesCard, {
   Employee,
 } from "@/features/organization/ui/employees/employees-card";
-import { Colors } from "@/shared/constants/theme";
 import { useThemeColors } from "@/shared/hooks/use-theme";
-import { Feather } from "@expo/vector-icons";
+import { SearchBarHeader } from "@/widgets/search-bar-header/ui/search-bar-header";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { useEffect, useRef, useState } from "react";
-import {
-  FlatList,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 
 export default function EmployeesScreen() {
   const theme = useThemeColors();
@@ -104,25 +96,11 @@ export default function EmployeesScreen() {
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       {/* Header */}
-      <View style={styles.header}>
-        <View style={[styles.searchContainer, { backgroundColor: theme.card }]}>
-          <Feather name="search" size={20} color={theme.muted} />
-          <TextInput
-            placeholder="Qidirish..."
-            placeholderTextColor={theme.muted}
-            style={[styles.searchInput, { color: theme.text }]}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-        </View>
-        <Pressable
-          style={[styles.createBtn, { backgroundColor: Colors.primary }]}
-          onPress={handleCreate}
-        >
-          <Feather name="plus" size={20} color="white" />
-          <Text style={styles.createBtnText}>Yangi xodim</Text>
-        </Pressable>
-      </View>
+      <SearchBarHeader
+        value={searchQuery}
+        onChange={setSearchQuery}
+        isCreteBtn={true}
+      />
 
       {/* Content */}
       <FlatList

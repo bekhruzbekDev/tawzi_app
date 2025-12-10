@@ -8,8 +8,10 @@ type Store = {
   setTabBarInset: (value: number) => void;
   isDarkMode: boolean;
   setDarkMode: (value: boolean) => void;
-  consumer:{value:string,label:string}[]
-  setConsumers:(data:{value:string,label:string}[])=>void
+  consumer: { value: string; label: string }[];
+  setConsumers: (data: { value: string; label: string }[]) => void;
+  hidePages: string[];
+  setHidePages: (data: string[]) => void;
 };
 
 export const useStore = create<Store>()((set) => ({
@@ -30,8 +32,12 @@ export const useStore = create<Store>()((set) => ({
   setDarkMode(value) {
     set({ isDarkMode: value });
   },
-  consumer:[],
-  setConsumers(data){
-    set({consumer:data})
-  }
+  consumer: [],
+  setConsumers(data) {
+    set({ consumer: data });
+  },
+  hidePages: [],
+  setHidePages(data) {
+    set({ hidePages: data });
+  },
 }));

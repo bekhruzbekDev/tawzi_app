@@ -16,7 +16,7 @@ import React, {
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface DateFilterSheetProps {
-  unitType: "monthly" | "yearly";
+  unitType: string;
   value: Date;
   onChange: (date: Date) => void;
   minDate?: Date;

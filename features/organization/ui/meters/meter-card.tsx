@@ -1,5 +1,6 @@
 import { Colors } from "@/shared/constants/theme";
 import { useThemeColors } from "@/shared/hooks/use-theme";
+import { useStore } from "@/shared/store/store";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -13,7 +14,11 @@ interface Props {
 
 export const MeterCard = ({ meter, onCommandPress, onDetailPress }: Props) => {
   const theme = useThemeColors();
-
+  const user = useStore((state) => state.user);
+  const isCrete =
+    user?.role == "OrganizationAdmin"
+      ? true
+      : user?.permissions?.valve_control_permission;
   const getIcon = () => {
     switch (meter.type) {
       case "gas":
@@ -67,7 +72,8 @@ export const MeterCard = ({ meter, onCommandPress, onDetailPress }: Props) => {
                 : meter.type === "gas"
                 ? "Gaz"
                 : "Suv"}{" "}
-              • {meter.meter_direction === "incoming" ? "Kiruvchi" : "Chiquvchi"}
+              •{" "}
+              {meter.meter_direction === "incoming" ? "Kiruvchi" : "Chiquvchi"}
             </Text>
           </View>
         </View>
@@ -77,7 +83,9 @@ export const MeterCard = ({ meter, onCommandPress, onDetailPress }: Props) => {
             size={16}
             color={Colors.primary}
           />
-          <Text style={[styles.badgeText, { color: Colors.primary }]}>Faol</Text>
+          <Text style={[styles.badgeText, { color: Colors.primary }]}>
+            Faol
+          </Text>
         </View>
       </View>
 
@@ -103,16 +111,14 @@ export const MeterCard = ({ meter, onCommandPress, onDetailPress }: Props) => {
             Ma'lumot
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.powerBtn, { borderColor: theme.border }]}
-          onPress={onCommandPress}
-        >
-          <MaterialCommunityIcons
-            name="power"
-            size={20}
-            color={"red"}
-          />
-        </TouchableOpacity>
+        {isCrete && (
+          <TouchableOpacity
+            style={[styles.powerBtn, { borderColor: theme.border }]}
+            onPress={onCommandPress}
+          >
+            <MaterialCommunityIcons name="power" size={20} color={"red"} />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -203,6 +209,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     alignItems: "center",
     justifyContent: "center",
-    borderColor:"red"
+    borderColor: "red",
   },
 });

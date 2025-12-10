@@ -41,7 +41,10 @@ export default function RootLayout() {
                   name="create-meter"
                   options={{ headerShown: false }}
                 />
-                <Stack.Screen name="detail" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="consumer-detail"
+                  options={{ headerShown: false }}
+                />
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                 <Stack.Screen
                   name="(tabs)/profile"

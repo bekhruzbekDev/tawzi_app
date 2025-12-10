@@ -1,13 +1,12 @@
 import { useThemeColors } from "@/shared/hooks/use-theme";
-import CustomBarChart from "@/shared/ui/bar-chart";
-import { StyleSheet, Text, View } from "react-native";
+import DynamicChart from "@/shared/ui/dynamic-chart";
+import { StyleSheet, View } from "react-native";
 import { useOrganizationChartData } from "../../model/dashboard/use-chart";
 import { OrganizationChartSkeleton } from "./charts-skeleton";
 
-
 export const OrganizationCharts = () => {
   const theme = useThemeColors();
-  const {chartData,isLoading} = useOrganizationChartData();
+  const { chartData, isLoading } = useOrganizationChartData();
 
   if (isLoading) {
     return <OrganizationChartSkeleton />;
@@ -15,23 +14,18 @@ export const OrganizationCharts = () => {
 
   return (
     <View style={styles.container}>
-      <View
-        style={[
-          styles.barChart,
-          { backgroundColor: theme.card, shadowColor: theme.shadow },
-        ]}
-      >
-        <Text style={[styles.chartTitle, { color: theme.text }]}>
-          Resurst iste'moli
-        </Text>
-        <CustomBarChart data={chartData} />
-        <View style={[styles.infoLabel]}>
-          <View style={styles.dot} />
-          <Text style={[{ color: theme.text }]}>kiruvchi</Text>
-          <View style={[styles.dot, { backgroundColor: "#61C7FF" }]} />
-          <Text style={[{ color: theme.text }]}>Chiquvchi</Text>
-        </View>
-      </View>
+      <DynamicChart
+        value="Resurs iste'moli"
+        // subValue="2 450 kW"
+        // icon="lightning-bolt"
+        color="#f59e0b"
+        bgColor="#fffbeb"
+        // data={electricData}
+        multiple
+        multiData={chartData}
+        infoLabel={true}
+        dateFilter={true}
+      />
     </View>
   );
 };

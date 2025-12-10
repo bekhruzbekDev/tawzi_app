@@ -2,8 +2,13 @@ import { Colors } from "@/shared/constants/theme";
 import { useThemeColors } from "@/shared/hooks/use-theme";
 import Feather from "@expo/vector-icons/Feather";
 import { forwardRef, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Searchbar } from "react-native-paper";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 interface Props {
   onFilterPress?: () => void;
@@ -13,9 +18,10 @@ interface Props {
   onChange?: (text: string) => void;
   value?: string;
   filterOptions?: { label: string; value: string }[];
+  isCreteBtn?: boolean;
 }
 
-export const ConsumersHeader = forwardRef<View, Props>(
+export const SearchBarHeader = forwardRef<View, Props>(
   (
     {
       onFilterPress,
@@ -25,6 +31,7 @@ export const ConsumersHeader = forwardRef<View, Props>(
       onFilterSelect,
       activeFilter,
       filterOptions,
+      isCreteBtn,
     },
     ref
   ) => {
@@ -41,39 +48,42 @@ export const ConsumersHeader = forwardRef<View, Props>(
 
     return (
       <View style={[styles.header, { zIndex: 100 }]} ref={ref}>
-        <Searchbar
-          value={value ?? ""}
-          onChangeText={onChange}
-          style={{
-            flex: 1,
-            width: "auto",
-            backgroundColor: theme.card,
-            borderRadius: 16,
-            color: "red",
-            shadowOffset: { height: 0.1, width: 0 },
-            shadowColor: theme.shadow,
-          }}
-          placeholderTextColor={theme.text}
-          iconColor={theme.text}
-          placeholder="Izlash"
-        />
+        <View style={[styles.searchContainer, { backgroundColor: theme.card }]}>
+          <Feather name="search" size={20} color={theme.muted} />
+          <TextInput
+            placeholder="Qidirish..."
+            placeholderTextColor={theme.muted}
+            style={[styles.searchInput, { color: theme.text }]}
+            value={value}
+            onChangeText={onChange}
+          />
+        </View>
         <View style={{ position: "relative", zIndex: 100 }}>
           <TouchableOpacity
             style={[styles.filterBtn, { backgroundColor: theme.card }]}
             onPress={handlePress}
           >
-            <Feather name="filter" size={24} color={Colors.primary} />
+            {isCreteBtn ? (
+              <Feather name="plus" size={24} color={Colors.primary} />
+            ) : (
+              <Feather name="filter" size={24} color={Colors.primary} />
+            )}
             {filterCount > 0 && (
               <View style={styles.badge}>
                 <Text style={styles.badgeText}>{filterCount}</Text>
               </View>
             )}
           </TouchableOpacity>
-          {showFilter && filterOptions && (
+          {!isCreteBtn && showFilter && filterOptions && (
             <View
               style={[
                 styles.popup,
-                { backgroundColor: theme.card, shadowColor: theme.shadow },
+                {
+                  backgroundColor: theme.card,
+                  shadowColor: theme.shadow,
+                  borderColor: theme.border,
+                  borderWidth: 1,
+                },
               ]}
             >
               {filterOptions.map((option, index) => (
@@ -118,14 +128,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 16,
-    marginBottom: 20,
+    marginBottom: 16,
     paddingHorizontal: 16,
-    paddingTop: 16,
+    paddingTop: 12,
     zIndex: 10,
   },
   filterBtn: {
     paddingHorizontal: 20,
-    height: 55,
+    height: 48,
     borderRadius: 12,
     alignContent: "center",
     justifyContent: "center",
@@ -150,13 +160,13 @@ const styles = StyleSheet.create({
   },
   popup: {
     position: "absolute",
-    top: 65,
+    top: 55,
     right: 0,
     minWidth: 200,
     borderRadius: 12,
     padding: 8,
     shadowOffset: { height: 2, width: 0 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 5,
     zIndex: 1000,
@@ -176,5 +186,18 @@ const styles = StyleSheet.create({
     height: 1,
     width: "100%",
     opacity: 0.1,
+  },
+  searchContainer: {
+    flex: 1,
+    height: 48,
+    borderRadius: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 12,
+    gap: 8,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
   },
 });

@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { useConsumersData } from "../../model/consumers/use-consumers";
 
+import { useStore } from "@/shared/store/store";
 import { useRouter } from "expo-router";
 import { Consumer } from "../../model/consumers/types";
 import { ConsumerSkeleton } from "./consumer-skeleton";
@@ -54,7 +55,7 @@ export const ConsumesList = (props: Props) => {
           consumer={item}
           onEdit={(e) => editChange(item)}
           onDelete={(e) => deleteChange(item)}
-          navigateToDetail={(e) => router.push(`/detail`)}
+          navigateToDetail={(e) => router.push(`/consumer-detail`)}
         />
       )}
       ListEmptyComponent={
@@ -89,7 +90,11 @@ type CardProps = {
 
 const Card = ({ consumer, onEdit, onDelete, navigateToDetail }: CardProps) => {
   const theme = useThemeColors();
-
+  const user = useStore((state) => state.user),
+    isEdit =
+      user?.role == "OrganizationAdmin"
+        ? true
+        : user?.permissions?.add_consumer_permission;
   return (
     <Pressable
       style={[
@@ -115,32 +120,33 @@ const Card = ({ consumer, onEdit, onDelete, navigateToDetail }: CardProps) => {
             </Text>
           ) : null}
         </View>
+        {isEdit && (
+          <View style={styles.actions}>
+            <Pressable
+              onPress={() => onEdit?.(consumer)}
+              style={[
+                styles.iconBtn,
+                { backgroundColor: theme.surface, borderColor: theme.border },
+              ]}
+            >
+              <MaterialCommunityIcons
+                name="lead-pencil"
+                size={20}
+                color={Colors.primary}
+              />
+            </Pressable>
 
-        <View style={styles.actions}>
-          <Pressable
-            onPress={() => onEdit?.(consumer)}
-            style={[
-              styles.iconBtn,
-              { backgroundColor: theme.surface, borderColor: theme.border },
-            ]}
-          >
-            <MaterialCommunityIcons
-              name="lead-pencil"
-              size={20}
-              color={Colors.primary}
-            />
-          </Pressable>
-
-          <Pressable
-            onPress={() => onDelete?.(consumer)}
-            style={[
-              styles.iconBtn,
-              { backgroundColor: theme.surface, borderColor: theme.border },
-            ]}
-          >
-            <Feather name="trash-2" size={20} color="#ef4444" />
-          </Pressable>
-        </View>
+            <Pressable
+              onPress={() => onDelete?.(consumer)}
+              style={[
+                styles.iconBtn,
+                { backgroundColor: theme.surface, borderColor: theme.border },
+              ]}
+            >
+              <Feather name="trash-2" size={20} color="#ef4444" />
+            </Pressable>
+          </View>
+        )}
       </View>
 
       <View style={[styles.sep, { borderTopColor: theme.border }]} />

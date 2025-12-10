@@ -1,11 +1,11 @@
 import { useMeterActions } from "@/features/organization/model/meters/use-meter-actions";
-import { ConsumersHeader } from "@/features/organization/ui/consumers/consumer-header";
 import { MeterDetail } from "@/features/organization/ui/meters/meter-detail";
 import { MeterFilterSheet } from "@/features/organization/ui/meters/meter-filter-sheet";
 import MetersList from "@/features/organization/ui/meters/meters-list";
 import { SendCommand } from "@/features/organization/ui/meters/sent-command";
 import { Colors } from "@/shared/constants/theme";
 import { useThemeColors } from "@/shared/hooks/use-theme";
+import { SearchBarHeader } from "@/widgets/search-bar-header/ui/search-bar-header";
 import { AntDesign } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
@@ -13,30 +13,27 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 export default function Meters() {
   const theme = useThemeColors();
-const router = useRouter();
+  const router = useRouter();
 
-
-const {
-  commandSheetRef,
-  detailSheetRef,
-  filterSheetRef,
-  selectedMeter,
-  filters,
-  filterCount,
-  handleCommandPress,
-  handleDetailPress,
-  handleFilterPress,
-  handleApplyFilters,
-  setSearchValue,
-  searchValue
-} = useMeterActions();
-
-
-
+  const {
+    commandSheetRef,
+    detailSheetRef,
+    filterSheetRef,
+    selectedMeter,
+    filters,
+    filterCount,
+    handleCommandPress,
+    handleDetailPress,
+    handleFilterPress,
+    handleApplyFilters,
+    setSearchValue,
+    searchValue,
+    isMeterCrete,
+  } = useMeterActions();
 
   return (
     <>
-      <ConsumersHeader
+      <SearchBarHeader
         onFilterPress={handleFilterPress}
         filterCount={filterCount}
         onChange={setSearchValue}
@@ -49,15 +46,17 @@ const {
           filters={filters}
         />
       </View>
-      <TouchableOpacity
-        style={[
-          styles.addBtn,
-          { backgroundColor: theme.surface, shadowColor: theme.shadow },
-        ]}
-        onPress={() => router.push("/create-meter")}
-      >
-        <AntDesign name="plus" size={24} color={Colors.primary} />
-      </TouchableOpacity>
+      {isMeterCrete && (
+        <TouchableOpacity
+          style={[
+            styles.addBtn,
+            { backgroundColor: theme.surface, shadowColor: theme.shadow },
+          ]}
+          onPress={() => router.push("/create-meter")}
+        >
+          <AntDesign name="plus" size={24} color={Colors.primary} />
+        </TouchableOpacity>
+      )}
       <SendCommand ref={commandSheetRef} meter={selectedMeter} />
       <MeterDetail ref={detailSheetRef} meter={selectedMeter} />
       <MeterFilterSheet

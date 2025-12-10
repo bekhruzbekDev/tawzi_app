@@ -1,21 +1,14 @@
-import { Colors } from "@/shared/constants/theme";
 import { useThemeColors } from "@/shared/hooks/use-theme";
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { DateSheetFilter } from "@/shared/ui/date-sheet-filter";
+import { TabBtns } from "@/shared/ui/tab-btns";
+import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useRef, useState } from "react";
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { DateFilterSheet } from "./date-filter-sheet";
+import { useState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 export const ConsumerDetailHeader = () => {
   const [unitType, setUnitType] = useState<"monthly" | "yearly">("monthly");
-  const bottomSheetRef = useRef<BottomSheetModal>(null);
+
   const [date, setDate] = useState(new Date());
   const filterData = [
     {
@@ -32,13 +25,6 @@ export const ConsumerDetailHeader = () => {
     setDate(newDate);
   };
 
-  const formattedDate =
-    unitType === "monthly"
-      ? `${date.toLocaleDateString("uz-UZ", {
-          month: "long",
-        })} - ${date.getFullYear()}`
-      : `${date.getFullYear()}`;
-
   const router = useRouter();
   const theme = useThemeColors();
   return (
@@ -50,62 +36,23 @@ export const ConsumerDetailHeader = () => {
         >
           <Feather name="chevron-left" size={24} color={theme.text} />
         </Pressable>
-        <View style={styles.unitPills}>
-          {filterData.map((data, i) => (
-            <TouchableOpacity
-              key={i}
-              style={[
-                styles.unitPill,
-                unitType == data.value.toLowerCase()
-                  ? { backgroundColor: Colors.primary }
-                  : { backgroundColor: theme.card },
-              ]}
-              onPress={() => setUnitType(data.value as "monthly" | "yearly")}
-            >
-              <Text
-                style={[
-                  styles.unitText,
-                  unitType == data.value.toLowerCase() && { color: "#fff" },
-                ]}
-              >
-                {data.label}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+
+        <TabBtns
+          data={filterData}
+          defaultValue={unitType}
+          onChange={(value) => setUnitType(value as "monthly" | "yearly")}
+        />
       </View>
 
       <View style={styles.flex}>
         <Text style={[styles.headerTitle, { color: theme.text }]}>
           1 - Tashkilot
         </Text>
-        <TouchableOpacity
-          onPress={() => bottomSheetRef.current?.present()}
-          style={{
-            alignItems: "center",
-            gap: 8,
-            flexDirection: "row",
-            alignContent: "center",
-          }}
-        >
-          <Text style={{ color: theme.muted, textTransform: "capitalize" }}>
-            {formattedDate}
-          </Text>
-          <MaterialCommunityIcons
-            name="calendar-month-outline"
-            size={24}
-            color={theme.muted}
-          />
-        </TouchableOpacity>
+        <DateSheetFilter
+          unitType={unitType}
+          handleDateChange={handleDateChange}
+        />
       </View>
-      <DateFilterSheet
-        ref={bottomSheetRef}
-        unitType={unitType}
-        value={date}
-        onChange={handleDateChange}
-        minDate={new Date(2024, 8, 1)} // Set to September 1, 2025 as per request
-        maxDate={new Date()} // Current date
-      />
     </View>
   );
 };
@@ -129,12 +76,4 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
   },
-  unitPills: { flexDirection: "row", alignItems: "center", gap: 8 },
-  unitPill: {
-    backgroundColor: "#fff",
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 20,
-  },
-  unitText: { color: "#6B7280" },
 });

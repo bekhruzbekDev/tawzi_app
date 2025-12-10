@@ -26,6 +26,7 @@ export default function OrganizationAdmin() {
     isLoading,
     hasBilling,
   } = useDashboardData();
+
   return (
     <>
       <OrgDashboardHeader

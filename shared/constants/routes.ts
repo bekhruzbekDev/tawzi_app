@@ -2,7 +2,7 @@ import { RoutesData } from "../types/helper.types";
 
 export const allRoutes: RoutesData[] = [
   {
-    id: "1",
+    id: "ownerDashboard",
     title: "Dashboard",
     icon: "home",
     path: "owner/index",
@@ -10,7 +10,7 @@ export const allRoutes: RoutesData[] = [
     role: ["owner"],
   },
   {
-    id: "2",
+    id: "ownerOrganizations",
     title: "Tashkilotlar",
     icon: "organization",
     path: "owner/organizations",
@@ -20,7 +20,7 @@ export const allRoutes: RoutesData[] = [
 
   // consumers
   {
-    id: "3",
+    id: "consumerDashboard",
     title: "Bosh sahifa",
     icon: "dashboard",
     path: "consumer/index",
@@ -28,7 +28,7 @@ export const allRoutes: RoutesData[] = [
     role: ["consumer"],
   },
   {
-    id: "4",
+    id: "consumerStatistics",
     title: "Statistika",
     icon: "pie-chart",
     path: "consumer/statistics",
@@ -36,7 +36,7 @@ export const allRoutes: RoutesData[] = [
     role: ["consumer"],
   },
   {
-    id: "45",
+    id: "consumerHistory",
     title: "Tarix",
     icon: "history",
     path: "consumer/history",
@@ -44,7 +44,7 @@ export const allRoutes: RoutesData[] = [
     role: ["consumer"],
   },
   {
-    id: "7",
+    id: "profile",
     title: "profile",
     icon: "user",
     path: "public/profile",
@@ -52,7 +52,7 @@ export const allRoutes: RoutesData[] = [
     role: ["consumer"],
   },
   {
-    id: "5",
+    id: "organizationDashboard",
     title: "Bosh sahifa",
     icon: "space-dashboard",
     path: "organization/index",
@@ -60,7 +60,7 @@ export const allRoutes: RoutesData[] = [
     role: ["organization"],
   },
   {
-    id: "6",
+    id: "organizationConsumers",
     title: "Istemolchilar",
     icon: "users",
     path: "organization/consumers",
@@ -68,7 +68,7 @@ export const allRoutes: RoutesData[] = [
     role: ["organization"],
   },
   {
-    id: "9",
+    id: "organizationMeters",
     title: "Hisoblagichlar",
     icon: "gas-meter",
     path: "organization/meters",
@@ -76,7 +76,7 @@ export const allRoutes: RoutesData[] = [
     role: ["organization"],
   },
   {
-    id: "111",
+    id: "organizationFinance",
     title: "Hisob kitob",
     icon: "wallet-outline",
     path: "organization/finance",
@@ -84,7 +84,7 @@ export const allRoutes: RoutesData[] = [
     role: ["organization"],
   },
   {
-    id: "112",
+    id: "organizationEmployees",
     title: "Hodimlar",
     icon: "users-cog",
     path: "organization/employees",

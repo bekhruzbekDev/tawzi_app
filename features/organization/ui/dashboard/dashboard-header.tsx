@@ -1,9 +1,10 @@
 import { Colors } from "@/shared/constants/theme";
 import { useThemeColors } from "@/shared/hooks/use-theme";
+import { TabBtns } from "@/shared/ui/tab-btns";
 import { Ionicons } from "@expo/vector-icons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useRouter } from "expo-router";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 interface Props {
   unitType: string;
@@ -20,30 +21,17 @@ export const OrgDashboardHeader = ({
   return (
     <View style={styles.container}>
       <View style={styles.unitRow}>
-        <View style={styles.unitPills}>
-          {deviceTypes.length > 1 &&
-            deviceTypes.map((data, i) => (
-              <TouchableOpacity
-                key={i}
-                style={[
-                  styles.unitPill,
-                  unitType == data.toLowerCase()
-                    ? { backgroundColor: Colors.primary }
-                    : { backgroundColor: theme.card },
-                ]}
-                onPress={() => setUnitType(data.toLocaleLowerCase())}
-              >
-                <Text
-                  style={[
-                    styles.unitText,
-                    unitType == data.toLowerCase() && { color: "#fff" },
-                  ]}
-                >
-                  {data}
-                </Text>
-              </TouchableOpacity>
-            ))}
-        </View>
+        {deviceTypes.length > 1 && (
+          <TabBtns
+            data={deviceTypes.map((item) => ({
+              value: item.toLowerCase(),
+              label: item,
+            }))}
+            defaultValue={unitType}
+            onChange={(value) => setUnitType(value)}
+          />
+        )}
+
         <View style={{ position: "relative", flexDirection: "row", gap: 16 }}>
           <View
             style={[
@@ -53,7 +41,12 @@ export const OrgDashboardHeader = ({
           >
             <Text style={{ fontSize: 12, color: "white" }}>2</Text>
           </View>
-          <FontAwesome name="user" size={30} color={Colors.primary} onPress={() => router.push("/(tabs)/public/profile")}/>
+          <FontAwesome
+            name="user"
+            size={30}
+            color={Colors.primary}
+            onPress={() => router.push("/(tabs)/public/profile")}
+          />
           <Ionicons name="notifications" size={30} color={theme.text} />
         </View>
       </View>
@@ -77,15 +70,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  unitPills: { flexDirection: "row" },
-  unitPill: {
-    backgroundColor: "#fff",
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 20,
-    marginRight: 8,
-  },
-  unitText: { color: "#6B7280" },
+
   notificationData: {
     paddingHorizontal: 7,
     paddingVertical: 4,

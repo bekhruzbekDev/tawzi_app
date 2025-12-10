@@ -16,7 +16,7 @@ export default function Index() {
   const roleRoutes: Record<string, string> = {
     OrganizationAdmin: "/(tabs)/organization",
     Consumer: "/(tabs)/consumer",
-    Employer: "/(tabs)/owner",
+    Employer: "/(tabs)/organization",
     owner: "/(tabs)/owner",
   };
 

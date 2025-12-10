@@ -1,7 +1,7 @@
 import ConsumerHeader from "@/features/consumer/ui/header";
-import ConsumptionChart from "@/features/organization/ui/consumers/consumption-chart";
 import DetailMeterValues from "@/features/organization/ui/consumers/detail-meter-values";
 import { useThemeColors } from "@/shared/hooks/use-theme";
+import DynamicChart from "@/shared/ui/dynamic-chart";
 import { ScrollView, StyleSheet } from "react-native";
 
 const electricData = [
@@ -85,8 +85,7 @@ export default function ConsumerDashboard() {
       {/* <ConsumerCurrentValue /> */}
       <DetailMeterValues data={data} />
       {/* <ConsumerMeterInfo /> */}
-      <ConsumptionChart
-        title="Elektr"
+      <DynamicChart
         value="450 000 UZS"
         subValue="2 450 kW"
         icon="lightning-bolt"
@@ -95,8 +94,7 @@ export default function ConsumerDashboard() {
         data={electricData}
       />
 
-      <ConsumptionChart
-        title="Gaz"
+      <DynamicChart
         value="35 000 UZS"
         subValue="90 m³"
         icon="fire"
@@ -105,8 +103,7 @@ export default function ConsumerDashboard() {
         data={gasData}
       />
 
-      <ConsumptionChart
-        title="Suv"
+      <DynamicChart
         value="120 000 UZS"
         subValue="120 m³"
         icon="water-outline"

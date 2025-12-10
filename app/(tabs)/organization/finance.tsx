@@ -1,10 +1,11 @@
-import { PaymentSheet } from "@/features/organization/ui/consumers/payment-sheet";
 import DebtorsSummary from "@/features/organization/ui/finance/debtors-summary";
-import FinanceChart from "@/features/organization/ui/finance/finance-chart";
+import { PaymentSheet } from "@/widgets/payment-sheet/ui/payment-sheet";
+
 import { FinanceHeader } from "@/features/organization/ui/finance/finance-header";
 import FinanceSummaryCard from "@/features/organization/ui/finance/finance-summary-card";
 import { Colors } from "@/shared/constants/theme";
 import { useThemeColors } from "@/shared/hooks/use-theme";
+import DynamicChart from "@/shared/ui/dynamic-chart";
 import { Ionicons } from "@expo/vector-icons";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { useRef, useState } from "react";
@@ -92,22 +93,22 @@ export default function FinanceScreen() {
 
         {/* Charts */}
         <View style={styles.section}>
-          <FinanceChart
-            title="Elektr tushumi"
+          <DynamicChart
+            value="Elektr tushumi"
             data={getMockData(150000)}
             color="#f59e0b"
             icon="lightning-bolt"
             bgColor="#fffbeb"
           />
-          <FinanceChart
-            title="Gaz tushumi"
+          <DynamicChart
+            value="Gaz tushumi"
             data={getMockData(80000)}
             color="#f97316"
             icon="fire"
             bgColor="#fff7ed"
           />
-          <FinanceChart
-            title="Suv tushumi"
+          <DynamicChart
+            value="Suv tushumi"
             data={getMockData(40000)}
             color="#3b82f6"
             icon="water-outline"
@@ -134,7 +135,7 @@ export default function FinanceScreen() {
         <Text style={styles.fabText}>To'lov</Text>
       </Pressable>
 
-      <PaymentSheet ref={paymentSheetRef} />
+      <PaymentSheet ref={paymentSheetRef} isConsumer={true} />
     </View>
   );
 }

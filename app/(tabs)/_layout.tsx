@@ -7,6 +7,7 @@ import { useStore } from "@/shared/store/store";
 import CustomNavBar from "@/shared/ui/customBar";
 export default function TabLayout() {
   const userData = useStore((state) => state.user);
+  const hidePages = useStore((state) => state.hidePages);
   const tabBarInset = useStore((state) => state.tabBarInset);
   const themeColors = useThemeColors();
   const userRole = userData
@@ -18,7 +19,7 @@ export default function TabLayout() {
       ? "organization"
       : "owner"
     : "";
-  const routes = allRoutes.filter((item) => item.role.includes(userRole));
+  const routes = allRoutes.filter((item) => item.role.includes(userRole) && !hidePages.includes(item.id));
   return (
     <Tabs
       screenOptions={{

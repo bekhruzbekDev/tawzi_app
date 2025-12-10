@@ -9,6 +9,8 @@ import { GetUserRes } from "../types/helper.types";
 export const useAuth = () => {
   const router = useRouter();
   const setUSerData = useStore((state) => state.setUserData);
+  const setHidePages = useStore((state) => state.setHidePages);
+  const hidePages = useStore((state) => state.hidePages);
   const { data, isLoading, isSuccess } = useQuery<GetUserRes>({
     queryKey: ["getUser"],
     queryFn: getUser,
@@ -16,8 +18,19 @@ export const useAuth = () => {
 
   useEffect(() => {
     if (!isLoading && isSuccess) {
-
       setUSerData(data?.data);
+      setHidePages(
+        data?.data.role == "OrganizationAdmin"
+          ? [...hidePages]
+          : data?.data.role == "Employer"
+          ? [...hidePages, "organizationEmployees"]
+          : [...hidePages]
+      );
+      setHidePages(
+        data.data.organization?.has_billing
+          ? [...hidePages]
+          : [...hidePages, "organizationFinance"]
+      );
     }
     if (!isLoading && !isSuccess) {
       setUSerData(null);
@@ -28,3 +41,4 @@ export const useAuth = () => {
   }, [data, isSuccess, isLoading]);
   return { isLoading, data, isSuccess };
 };
+
