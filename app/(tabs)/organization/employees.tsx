@@ -1,110 +1,43 @@
+import { Employee } from "@/features/organization/model/employees/types";
+import { useEmployeeActions } from "@/features/organization/model/employees/use-employee-actions";
 import { CreateEmployeeSheet } from "@/features/organization/ui/employees/create-employee";
-import EmployeesCard, {
-  Employee,
-} from "@/features/organization/ui/employees/employees-card";
+import EmployeesCard from "@/features/organization/ui/employees/employees-card";
 import { useThemeColors } from "@/shared/hooks/use-theme";
+import DeleteModal from "@/shared/ui/delete-modal";
 import { SearchBarHeader } from "@/widgets/search-bar-header/ui/search-bar-header";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import { useEffect, useRef, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 
 export default function EmployeesScreen() {
   const theme = useThemeColors();
-  const bottomSheetRef = useRef<BottomSheetModal>(null);
-  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
-    null
-  );
-  const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const [employees, setEmployees] = useState<Employee[]>([
-    {
-      id: "1",
-      name: "dasdasdasd",
-      login: "admindasd",
-      phone: "+998901234567",
-      permissions: {
-        can_send_command: false,
-        can_add_employee: false,
-        can_add_meter: false,
-        can_add_consumer: false,
-      },
-    },
-    {
-      id: "2",
-      name: "Sardor Salimov",
-      login: "sardor_s",
-      phone: "+998998887766",
-      permissions: {
-        can_send_command: true,
-        can_add_employee: true,
-        can_add_meter: true,
-        can_add_consumer: true,
-      },
-    },
-  ]);
-
-  useEffect(() => {
-    // Simulate initial loading
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  }, []);
-
-  const handleCreate = () => {
-    setSelectedEmployee(null);
-    bottomSheetRef.current?.present();
-  };
-
-  const handleEdit = (employee: Employee) => {
-    setSelectedEmployee(employee);
-    bottomSheetRef.current?.present();
-  };
-
-  const handleDelete = (id: string) => {
-    // Just for demo, remove from local state
-    setEmployees((prev) => prev.filter((e) => e.id !== id));
-  };
-
-  const handleSheetSubmit = (data: any) => {
-    // Log data as requested
-    console.log("SHEET SUBMITTED:", data);
-
-    if (selectedEmployee) {
-      // Edit Mode: Update local list
-      setEmployees((prev) =>
-        prev.map((e) => (e.id === selectedEmployee.id ? { ...e, ...data } : e))
-      );
-    } else {
-      // Create Mode: Add to local list
-      const newEmployee: Employee = {
-        id: Math.random().toString(),
-        ...data,
-      };
-      setEmployees((prev) => [...prev, newEmployee]);
-    }
-
-    bottomSheetRef.current?.dismiss();
-  };
-
-  const filteredEmployees = employees.filter(
-    (e) =>
-      e.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      e.login.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const {
+    data,
+    loading,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+    searchQuery,
+    setSearchQuery,
+    handleCreate,
+    handleEdit,
+    bottomSheetRef,
+    selectedEmployee,
+    deleteModalVisible,
+    setDeleteModalVisible,
+    handleDelete,
+  } = useEmployeeActions();
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      {/* Header */}
       <SearchBarHeader
         value={searchQuery}
         onChange={setSearchQuery}
         isCreteBtn={true}
+        onFilterPress={handleCreate}
       />
 
-      {/* Content */}
       <FlatList
-        data={loading ? [1, 2, 3] : filteredEmployees} // Skeleton placeholders
+        data={loading ? [1, 2, 3] : data}
         keyExtractor={(item: any) => (loading ? item.toString() : item.id)}
         renderItem={({ item }) => (
           <EmployeesCard
@@ -114,6 +47,19 @@ export default function EmployeesScreen() {
             isLoading={loading}
           />
         )}
+        onEndReached={() => {
+          if (hasNextPage) {
+            fetchNextPage();
+          }
+        }}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          isFetchingNextPage ? (
+            <View style={{ padding: 10 }}>
+              <ActivityIndicator size="small" />
+            </View>
+          ) : null
+        }
         contentContainerStyle={styles.listContent}
         ListEmptyComponent={
           !loading ? (
@@ -129,7 +75,11 @@ export default function EmployeesScreen() {
       <CreateEmployeeSheet
         ref={bottomSheetRef}
         initialValues={selectedEmployee}
-        onSubmit={handleSheetSubmit}
+      />
+      <DeleteModal
+        visible={deleteModalVisible}
+        onchange={setDeleteModalVisible}
+        queryKey="get-employees"
       />
     </View>
   );

@@ -3,24 +3,12 @@ import { useThemeColors } from "@/shared/hooks/use-theme";
 import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-
-export interface Employee {
-  id: string;
-  name: string;
-  login: string;
-  phone: string;
-  permissions: {
-    can_send_command: boolean;
-    can_add_employee: boolean;
-    can_add_meter: boolean;
-    can_add_consumer: boolean;
-  };
-}
+import { Employee } from "../../model/employees/types";
 
 interface Props {
   employee: Employee;
   onEdit: (employee: Employee) => void;
-  onDelete?: (id: string) => void;
+  onDelete?: (id: number | string) => void;
   isLoading?: boolean;
 }
 
@@ -37,7 +25,6 @@ export default function EmployeesCard({
   }
 
   const renderPermissionChip = (label: string, hasPermission: boolean) => {
-    if (!hasPermission) return null; // Only show active permissions like in the image? Or show all?
     // Image shows distinct green/check items. Usually "permissions" list shows what they CAN do.
     // If they can't, maybe don't show or show gray? User said "ruxsatlar" (permissions), usually implies active ones.
     // Let's show only active ones for "chips" style to be cleaner, similar to "Activ" tags usually.
@@ -46,7 +33,11 @@ export default function EmployeesCard({
 
     return (
       <View style={[styles.permissionChip, { backgroundColor: theme.surface }]}>
-        <Ionicons name="checkmark" size={16} color="#22c55e" />
+        {hasPermission ? (
+          <Ionicons name="checkmark" size={16} color="#22c55e" />
+        ) : (
+          <Ionicons name="close" size={16} color="#ef4444" />
+        )}
         <Text style={[styles.chipText, { color: theme.text }]}>{label}</Text>
       </View>
     );

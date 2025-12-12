@@ -1,7 +1,7 @@
 import ConsumerHeader from "@/features/consumer/ui/header";
-import DetailMeterValues from "@/features/organization/ui/consumers/detail-meter-values";
 import { useThemeColors } from "@/shared/hooks/use-theme";
 import DynamicChart from "@/shared/ui/dynamic-chart";
+import DetailMeterValues from "@/widgets/consumer-devices-info/ui/detail-meter-values";
 import { ScrollView, StyleSheet } from "react-native";
 
 const electricData = [
@@ -83,7 +83,7 @@ export default function ConsumerDashboard() {
     >
       <ConsumerHeader />
       {/* <ConsumerCurrentValue /> */}
-      <DetailMeterValues data={data} />
+      <DetailMeterValues data={data} filter_type="monthly" date={new Date()} />
       {/* <ConsumerMeterInfo /> */}
       <DynamicChart
         value="450 000 UZS"

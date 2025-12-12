@@ -1,56 +1,24 @@
 import { ConsumerDetailHeader } from "@/features/organization/ui/consumers/detail-header";
-import DetailMeterValues from "@/features/organization/ui/consumers/detail-meter-values";
 import { Colors } from "@/shared/constants/theme";
 import { useThemeColors } from "@/shared/hooks/use-theme";
-import DynamicChart from "@/shared/ui/dynamic-chart";
+import ConsumersDetailCharts from "@/widgets/consumer-detail-charts/ui/consumers-charts";
+import DetailMeterValues from "@/widgets/consumer-devices-info/ui/detail-meter-values";
 import { PaymentSheet } from "@/widgets/payment-sheet/ui/payment-sheet";
 import { Ionicons } from "@expo/vector-icons";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import { useRef } from "react";
+import { useLocalSearchParams } from "expo-router";
+import { useRef, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function DetailScreen() {
   const theme = useThemeColors();
+  const [date, setDate] = useState(new Date());
   const paymentSheetRef = useRef<BottomSheetModal>(null);
-
-  // Mock Data for Charts
-  const electricData = [
-    { value: 120, label: "1" },
-    { value: 210, label: "2" },
-    { value: 150, label: "3" },
-    { value: 320, label: "4" },
-    { value: 100, label: "5" },
-    { value: 80, label: "6" },
-    { value: 450, label: "7" },
-    { value: 380, label: "8" },
-    { value: 600, label: "9" },
-    { value: 620, label: "10" },
-    { value: 780, label: "11" },
-    { value: 800, label: "12" },
-  ];
-
-  const gasData = [
-    { value: 40, label: "1" },
-    { value: 80, label: "2" },
-    { value: 30, label: "3" },
-    { value: 90, label: "4" },
-    { value: 20, label: "5" },
-    { value: 10, label: "6" },
-    { value: 95, label: "7" },
-    { value: 85, label: "8" },
-    { value: 25, label: "9" },
-  ];
-  const waterData = [
-    { value: 15, label: "1" },
-    { value: 25, label: "2" },
-    { value: 10, label: "3" },
-    { value: 30, label: "4" },
-    { value: 12, label: "5" },
-    { value: 8, label: "6" },
-    { value: 35, label: "7" },
-    { value: 28, label: "8" },
-    { value: 14, label: "9" },
-  ];
+  const params = useLocalSearchParams();
+  const id: string | null = String(params.id);
+  const [filter_type, setFilterType] = useState<"monthly" | "yearly">(
+    "monthly"
+  );
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
@@ -61,44 +29,24 @@ export default function DetailScreen() {
         stickyHeaderIndices={[0]}
       >
         <View style={[{ backgroundColor: theme.background }]}>
-          <ConsumerDetailHeader />
+          <ConsumerDetailHeader
+            onFilterChange={setFilterType}
+            filter_type={filter_type}
+            setDate={setDate}
+          />
         </View>
 
-        <View style={{ paddingHorizontal: 16 }}>
-          <DetailMeterValues />
+        <View style={{ paddingHorizontal: 16, gap: 24 }}>
+          <DetailMeterValues id={id} filter_type={filter_type} date={date} />
 
-          <View style={{ height: 24 }} />
-
-          <DynamicChart
-            value="450 000 UZS"
-            subValue="2 450 kW"
-            icon="lightning-bolt"
-            color="#f59e0b"
-            bgColor="#fffbeb"
-            data={electricData}
-          />
-
-          <DynamicChart
-            value="35 000 UZS"
-            subValue="90 m³"
-            icon="fire"
-            color="#f97316"
-            bgColor="#fff7ed"
-            data={gasData}
-          />
-
-          <DynamicChart
-            value="120 000 UZS"
-            subValue="120 m³"
-            icon="water-outline"
-            color="#3b82f6"
-            bgColor="#eff6ff"
-            data={waterData}
+          <ConsumersDetailCharts
+            id={id}
+            filter_type={filter_type}
+            date={date}
           />
         </View>
       </ScrollView>
 
-      {/* Floating Action Button */}
       <Pressable
         style={({ pressed }) => [
           styles.fab,

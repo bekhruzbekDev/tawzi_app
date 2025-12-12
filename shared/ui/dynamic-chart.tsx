@@ -25,6 +25,8 @@ type Props = {
   }[];
   infoLabel?: boolean;
   dateFilter?: boolean;
+  onChangeDate?: (date: Date) => void;
+  date?: Date;
 };
 
 export default function DynamicChart(props: Props) {
@@ -41,6 +43,8 @@ export default function DynamicChart(props: Props) {
     multiData,
     infoLabel,
     dateFilter,
+    onChangeDate,
+    date,
   } = props;
   const theme = useThemeColors();
   const screenWidth = Dimensions.get("window").width;
@@ -115,7 +119,7 @@ export default function DynamicChart(props: Props) {
     : 0;
 
   const handleDateChange = (newDate: Date) => {
-    console.log(newDate);
+    onChangeDate?.(newDate);
   };
 
   return (
@@ -141,6 +145,7 @@ export default function DynamicChart(props: Props) {
           {dateFilter && (
             <DateSheetFilter
               handleDateChange={handleDateChange}
+              date={date}
               unitType={"monthly"}
             />
           )}

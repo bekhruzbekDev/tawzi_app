@@ -4,9 +4,13 @@ import { StyleSheet, View } from "react-native";
 import { useOrganizationChartData } from "../../model/dashboard/use-chart";
 import { OrganizationChartSkeleton } from "./charts-skeleton";
 
-export const OrganizationCharts = () => {
+interface Props {
+  filter_type: "electric" | "gas" | "water";
+}
+export const OrganizationCharts = ({ filter_type }: Props) => {
   const theme = useThemeColors();
-  const { chartData, isLoading } = useOrganizationChartData();
+  const { chartData, isLoading, setDate, date } =
+    useOrganizationChartData(filter_type);
 
   if (isLoading) {
     return <OrganizationChartSkeleton />;
@@ -25,6 +29,8 @@ export const OrganizationCharts = () => {
         multiData={chartData}
         infoLabel={true}
         dateFilter={true}
+        onChangeDate={setDate}
+        date={date}
       />
     </View>
   );

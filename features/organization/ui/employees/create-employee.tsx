@@ -1,76 +1,70 @@
 import { Colors } from "@/shared/constants/theme";
 import { useThemeColors } from "@/shared/hooks/use-theme";
-import { Feather, Ionicons } from "@expo/vector-icons";
+import DynamicInput from "@/shared/ui/dynamic-input";
+import { Ionicons } from "@expo/vector-icons";
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
-import React, {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import React, { forwardRef, useCallback, useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Button } from "react-native-paper";
 import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
-import { Employee } from "./employees-card";
+  createEmployeeForm,
+  EditEmployeeForm,
+} from "../../model/employees/constants";
+import {
+  CreateEmployeeFormType,
+  EditEmployeeFormType,
+  Employee,
+} from "../../model/employees/types";
+import { useCreateEmployee } from "../../model/employees/use-create-employee";
 
 interface Props {
   initialValues?: Employee | null;
-  onSubmit: (data: any) => void;
 }
 
 export const CreateEmployeeSheet = forwardRef<BottomSheetModal, Props>(
-  ({ initialValues, onSubmit }, ref) => {
+  ({ initialValues }, ref: any) => {
     const theme = useThemeColors();
     const snapPoints = useMemo(() => ["85%"], []);
-    const [showPassword, setShowPassword] = useState(false);
 
-    const { control, handleSubmit, reset } = useForm({
+    const {
+      control,
+      handleSubmit,
+      reset,
+
+      formState: { errors },
+    } = useForm<CreateEmployeeFormType | EditEmployeeFormType>({
+      resolver: zodResolver(
+        initialValues ? EditEmployeeForm : createEmployeeForm
+      ),
       defaultValues: {
-        name: "",
-        phone: "+998",
-        login: "",
+        first_name: "",
+        phone_number: "",
+        username: "",
         password: "",
-        permissions: {
-          can_send_command: false,
-          can_add_employee: false,
-          can_add_meter: false,
-          can_add_consumer: false,
-        },
+        add_consumer_permission: false,
+        add_device_permission: false,
+        add_user_permission: false,
+        valve_control_permission: false,
       },
     });
 
     useEffect(() => {
       if (initialValues) {
         reset({
-          name: initialValues.name,
-          phone: initialValues.phone,
-          login: initialValues.login,
-          password: "", // Don't pre-fill password for security/design usually, or can fill dummy
-          permissions: initialValues.permissions,
-        });
-      } else {
-        reset({
-          name: "",
-          phone: "+998",
-          login: "",
+          first_name: initialValues.name,
+          phone_number: initialValues.phone,
+          username: initialValues.login,
           password: "",
-          permissions: {
-            can_send_command: false,
-            can_add_employee: false,
-            can_add_meter: false,
-            can_add_consumer: false,
-          },
+          add_consumer_permission: initialValues.permissions?.can_add_consumer,
+          add_device_permission: initialValues.permissions?.can_add_meter,
+          add_user_permission: initialValues.permissions?.can_add_employee,
+          valve_control_permission: initialValues.permissions?.can_send_command,
         });
       }
     }, [initialValues, reset]);
@@ -88,10 +82,60 @@ export const CreateEmployeeSheet = forwardRef<BottomSheetModal, Props>(
       []
     );
 
+    const { createMutation, editMutation, isPending } = useCreateEmployee(
+      reset,
+      initialValues?.id
+    );
+
     const onFormSubmit = (data: any) => {
-      console.log("Form Data:", data);
-      onSubmit(data);
+      console.log(initialValues);
+
+      if (initialValues) {
+        editMutation(data, {
+          onSuccess: () => {
+            (ref as any).current?.dismiss();
+          },
+        });
+      } else {
+        createMutation(data, {
+          onSuccess: () => {
+            (ref as any).current?.dismiss();
+          },
+        });
+      }
     };
+
+    const closeSheet = useCallback(() => {
+      if (ref && typeof ref !== "function") {
+        ref.current?.close();
+
+        reset({
+          first_name: "",
+          phone_number: "",
+          username: "",
+          password: "",
+          add_consumer_permission: false,
+          add_device_permission: false,
+          add_user_permission: false,
+          valve_control_permission: false,
+        });
+      }
+    }, [ref]);
+
+    const handleSheetChanges = useCallback((index: number) => {
+      if (index === -1) {
+        reset({
+          first_name: "",
+          phone_number: "",
+          username: "",
+          password: "",
+          add_consumer_permission: false,
+          add_device_permission: false,
+          add_user_permission: false,
+          valve_control_permission: false,
+        });
+      }
+    }, []);
 
     return (
       <BottomSheetModal
@@ -101,165 +145,73 @@ export const CreateEmployeeSheet = forwardRef<BottomSheetModal, Props>(
         backgroundStyle={{ backgroundColor: theme.surface }}
         handleIndicatorStyle={{ backgroundColor: theme.muted }}
         enablePanDownToClose={true}
+        onChange={handleSheetChanges}
       >
         <BottomSheetView style={styles.contentContainer}>
           <View style={styles.header}>
             <Text style={[styles.sheetTitle, { color: theme.text }]}>
               {initialValues ? "Hodimni tahrirlash" : "Hodim qo'shish"}
             </Text>
-            <Pressable onPress={() => (ref as any).current?.dismiss()}>
+            <Pressable onPress={closeSheet}>
               <Ionicons name="close" size={24} color={theme.text} />
             </Pressable>
           </View>
 
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.form}>
-              <View style={styles.field}>
-                <Text style={[styles.label, { color: theme.muted }]}>
-                  Ism familiya
-                </Text>
-                <Controller
-                  control={control}
-                  name="name"
-                  render={({ field: { onChange, value } }) => (
-                    <TextInput
-                      style={[
-                        styles.input,
-                        { borderColor: theme.border, color: theme.text },
-                      ]}
-                      value={value}
-                      onChangeText={onChange}
-                    />
-                  )}
-                />
-              </View>
-
-              <View style={styles.field}>
-                <Text style={[styles.label, { color: theme.muted }]}>
-                  Telefon
-                </Text>
-                <Controller
-                  control={control}
-                  name="phone"
-                  render={({ field: { onChange, value } }) => (
-                    <TextInput
-                      style={[
-                        styles.input,
-                        { borderColor: theme.border, color: theme.text },
-                      ]}
-                      value={value}
-                      onChangeText={onChange}
-                      keyboardType="phone-pad"
-                    />
-                  )}
-                />
-              </View>
-
-              <View style={styles.field}>
-                <Text style={[styles.label, { color: theme.muted }]}>
-                  Login
-                </Text>
-                <Controller
-                  control={control}
-                  name="login"
-                  render={({ field: { onChange, value } }) => (
-                    <View
-                      style={[
-                        styles.inputContainer,
-                        {
-                          borderColor: theme.border,
-                          backgroundColor: "#EBF1FA",
-                        },
-                      ]}
-                    >
-                      <TextInput
-                        style={[
-                          styles.inputNoBorder,
-                          { color: theme.text, flex: 1 },
-                        ]}
-                        value={value || "admin"}
-                        onChangeText={onChange}
-                      />
-                    </View>
-                  )}
-                />
-              </View>
-
-              <View style={styles.field}>
-                <Text style={[styles.label, { color: theme.muted }]}>
-                  Parol
-                </Text>
-                <Controller
-                  control={control}
-                  name="password"
-                  render={({ field: { onChange, value } }) => (
-                    <View
-                      style={[
-                        styles.inputContainer,
-                        {
-                          borderColor: theme.border,
-                          backgroundColor: "#EBF1FA",
-                        },
-                      ]}
-                    >
-                      <TextInput
-                        style={[
-                          styles.inputNoBorder,
-                          { color: theme.text, flex: 1 },
-                        ]}
-                        value={value}
-                        onChangeText={onChange}
-                        secureTextEntry={!showPassword}
-                        placeholder="•••••"
-                        placeholderTextColor={theme.muted}
-                      />
-                      <Pressable onPress={() => setShowPassword(!showPassword)}>
-                        <Feather
-                          name={showPassword ? "eye" : "eye-off"}
-                          size={18}
-                          color={theme.muted}
-                        />
-                      </Pressable>
-                    </View>
-                  )}
-                />
-              </View>
+              <DynamicInput
+                control={control}
+                name="first_name"
+                label="Ism familiya"
+              />
+              <DynamicInput
+                control={control}
+                name="phone_number"
+                label="Telefon"
+              />
+              <DynamicInput control={control} name="username" label="Login" />
+              <DynamicInput
+                control={control}
+                name="password"
+                label="Parol"
+                secureTextEntry
+              />
 
               <View style={styles.permissionsGrid}>
                 <PermissionCheckbox
                   control={control}
-                  name="permissions.can_send_command"
+                  name="valve_control_permission"
                   label="Commandda yuborish"
                   theme={theme}
                 />
                 <PermissionCheckbox
                   control={control}
-                  name="permissions.can_add_employee"
+                  name="add_user_permission"
                   label="Hodim qo'shish"
                   theme={theme}
                 />
                 <PermissionCheckbox
                   control={control}
-                  name="permissions.can_add_meter"
+                  name="add_device_permission"
                   label="Hisoblagich Qo'shish"
                   theme={theme}
                 />
                 <PermissionCheckbox
                   control={control}
-                  name="permissions.can_add_consumer"
+                  name="add_consumer_permission"
                   label="Istemolchi Qo'shish"
                   theme={theme}
                 />
               </View>
 
-              <Pressable
-                style={[styles.submitBtn, { backgroundColor: Colors.primary }]}
+              <Button
+                loading={isPending}
                 onPress={handleSubmit(onFormSubmit)}
+                mode="contained"
+                style={{ borderRadius: 12 }}
               >
-                <Text style={styles.submitText}>
-                  {initialValues ? "Saqlash" : "Qo'shish"}
-                </Text>
-              </Pressable>
+                {initialValues ? `Saqlash` : "Qo'shish"}
+              </Button>
             </View>
           </ScrollView>
         </BottomSheetView>
@@ -320,32 +272,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 16,
   },
-  field: {
-    gap: 6,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: "500",
-  },
-  input: {
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    height: 48,
-    fontSize: 14,
-  },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    height: 48,
-  },
-  inputNoBorder: {
-    height: 48,
-    fontSize: 14,
-  },
+
   permissionsGrid: {
     flexDirection: "row",
     flexWrap: "wrap",

@@ -55,7 +55,12 @@ export const ConsumesList = (props: Props) => {
           consumer={item}
           onEdit={(e) => editChange(item)}
           onDelete={(e) => deleteChange(item)}
-          navigateToDetail={(e) => router.push(`/consumer-detail`)}
+          navigateToDetail={(e) =>
+            router.push({
+              pathname: `/consumer-detail`,
+              params: { id: item.id },
+            })
+          }
         />
       )}
       ListEmptyComponent={

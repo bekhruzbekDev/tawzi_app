@@ -10,6 +10,7 @@ import {
   UIManager,
   View,
 } from "react-native";
+import { useConsumerDevicesInfo } from "../model/use-device-info";
 
 if (Platform.OS === "android") {
   if (UIManager.setLayoutAnimationEnabledExperimental) {
@@ -33,9 +34,18 @@ interface MeterAccordionData {
 
 interface DetailMeterValuesProps {
   data?: MeterAccordionData[];
+  id?: string | number;
+  filter_type: "monthly" | "yearly";
+  date: Date;
 }
-export default function DetailMeterValues({ data }: DetailMeterValuesProps) {
+export default function DetailMeterValues({
+  id,
+  filter_type,
+  date,
+}: DetailMeterValuesProps) {
   const theme = useThemeColors();
+
+  const { data } = useConsumerDevicesInfo(id ? id : null, filter_type, date);
 
   const demo = [
     {
@@ -69,18 +79,21 @@ export default function DetailMeterValues({ data }: DetailMeterValuesProps) {
       subMeters: [],
     },
   ];
-  const customData = data ? data : demo;
+  const customData: any[] = id ? data : demo;
 
   return (
     <View style={[styles.container, { backgroundColor: theme.card }]}>
-      {customData.map((item, index) => (
-        <View key={item.id}>
-          <MeterAccordion
-            item={item}
-            isLast={index === customData.length - 1}
-          />
-        </View>
-      ))}
+      {customData?.map(
+        (item, index) =>
+          item && (
+            <View key={index}>
+              <MeterAccordion
+                item={item}
+                isLast={index === customData.length - 1}
+              />
+            </View>
+          )
+      )}
     </View>
   );
 }
@@ -88,7 +101,7 @@ export default function DetailMeterValues({ data }: DetailMeterValuesProps) {
 const MeterAccordion = ({ item, isLast }: { item: any; isLast: boolean }) => {
   const theme = useThemeColors();
   const [expanded, setExpanded] = useState(false);
-  const hasSubMeters = item.subMeters && item.subMeters.length > 0;
+  const hasSubMeters = item?.subMeters && item?.subMeters.length > 0;
 
   const toggle = () => {
     if (hasSubMeters) {
@@ -106,20 +119,20 @@ const MeterAccordion = ({ item, isLast }: { item: any; isLast: boolean }) => {
     >
       <Pressable onPress={toggle} style={styles.meterCard}>
         <View style={styles.flex}>
-          <View style={[styles.iconCard, { backgroundColor: item.bg }]}>
+          <View style={[styles.iconCard, { backgroundColor: item?.bg }]}>
             <MaterialCommunityIcons
-              name={item.icon}
+              name={item?.icon}
               size={24}
-              color={item.color}
+              color={item?.color}
             />
           </View>
 
-          <Text style={[styles.name, { color: theme.text }]}>{item.name}</Text>
+          <Text style={[styles.name, { color: theme.text }]}>{item?.name}</Text>
         </View>
 
         <View style={styles.rightSide}>
           <Text style={[styles.amount, { color: theme.text }]}>
-            {item.totalUnit}
+            {item?.totalUnit}
           </Text>
           {hasSubMeters && (
             <View

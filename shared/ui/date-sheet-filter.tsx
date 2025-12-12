@@ -31,8 +31,8 @@ export const DateSheetFilter = ({
       : `${defaultDate.getFullYear()}`;
 
   const handleDate = (newDate: Date) => {
-    handleDateChange(newDate);
     setDefaultDate(newDate);
+    handleDateChange(newDate);
   };
   return (
     <>

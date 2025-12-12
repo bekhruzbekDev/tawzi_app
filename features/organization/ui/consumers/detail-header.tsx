@@ -3,13 +3,18 @@ import { DateSheetFilter } from "@/shared/ui/date-sheet-filter";
 import { TabBtns } from "@/shared/ui/tab-btns";
 import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-export const ConsumerDetailHeader = () => {
-  const [unitType, setUnitType] = useState<"monthly" | "yearly">("monthly");
-
-  const [date, setDate] = useState(new Date());
+interface Props {
+  filter_type: "monthly" | "yearly";
+  onFilterChange: (value: "monthly" | "yearly") => void;
+  setDate: (date: Date) => void;
+}
+export const ConsumerDetailHeader = ({
+  filter_type,
+  onFilterChange,
+  setDate,
+}: Props) => {
   const filterData = [
     {
       label: "Oylik",
@@ -20,6 +25,10 @@ export const ConsumerDetailHeader = () => {
       value: "yearly",
     },
   ];
+
+  const handleFilterChange = (value: "monthly" | "yearly") => {
+    onFilterChange(value);
+  };
 
   const handleDateChange = (newDate: Date) => {
     setDate(newDate);
@@ -39,8 +48,10 @@ export const ConsumerDetailHeader = () => {
 
         <TabBtns
           data={filterData}
-          defaultValue={unitType}
-          onChange={(value) => setUnitType(value as "monthly" | "yearly")}
+          defaultValue={filter_type}
+          onChange={(value) =>
+            handleFilterChange(value as "monthly" | "yearly")
+          }
         />
       </View>
 
@@ -49,7 +60,7 @@ export const ConsumerDetailHeader = () => {
           1 - Tashkilot
         </Text>
         <DateSheetFilter
-          unitType={unitType}
+          unitType={filter_type}
           handleDateChange={handleDateChange}
         />
       </View>

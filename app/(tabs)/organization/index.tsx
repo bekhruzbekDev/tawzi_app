@@ -45,7 +45,7 @@ export default function OrganizationAdmin() {
           />
         )}
 
-        <OrganizationCharts />
+        <OrganizationCharts filter_type={unitType as "electric" | "gas" | "water"} />
 
         {hasBilling && isLoading && <FinanceChartSkeleton />}
 

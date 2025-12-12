@@ -1,11 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { getOrganizationChartData } from "./queryes";
 import { OrganizationChartDataRes, OrgChartData } from "./types";
 
-export const useOrganizationChartData = () => {
+export const useOrganizationChartData = (
+  filter_type: "electric" | "gas" | "water"
+) => {
+  const [date, setDate] = useState(new Date());
   const { data, isLoading } = useQuery<OrganizationChartDataRes>({
-    queryKey: ["organization-chart-data"],
-    queryFn: () => getOrganizationChartData("electric", "monthly"),
+    queryKey: ["organization-chart-data", filter_type, date],
+    queryFn: () => getOrganizationChartData(filter_type, "monthly", date),
   });
   const chartData: OrgChartData[] =
     data?.data?.map((item) => ({
@@ -21,5 +25,7 @@ export const useOrganizationChartData = () => {
   return {
     chartData,
     isLoading,
+    setDate,
+    date,
   };
 };
