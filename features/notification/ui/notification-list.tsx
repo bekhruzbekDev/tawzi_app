@@ -1,6 +1,14 @@
 import { Colors } from "@/shared/constants/theme";
 import { useThemeColors } from "@/shared/hooks/use-theme";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { useCallback, useState } from "react";
+import {
+  FlatList,
+  Pressable,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 type NotificationItem = {
   id: string;
   title: string;
@@ -15,10 +23,19 @@ interface Props {
 }
 export default function NotificationList({ data, openDetail }: Props) {
   const theme = useThemeColors();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    // setRefreshing(false);
+  }, []);
   return (
     <FlatList
       data={data}
       keyExtractor={(item) => item.id}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
       renderItem={({ item }) => (
         <Pressable
           style={[

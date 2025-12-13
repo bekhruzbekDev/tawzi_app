@@ -1,3 +1,4 @@
+import { useThemeColors } from "@/shared/hooks/use-theme";
 import DynamicInput from "@/shared/ui/dynamic-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
@@ -22,6 +23,7 @@ interface Props {
 }
 
 export default function LoginForm({ submit, loading }: Props) {
+  const theme = useThemeColors();
   const {
     control,
     handleSubmit,
@@ -33,7 +35,7 @@ export default function LoginForm({ submit, loading }: Props) {
 
   return (
     <>
-      <View style={styles.form}>
+      <View style={[styles.form, { backgroundColor: theme.card }]}>
         {/* Email Input */}
         <DynamicInput
           control={control}

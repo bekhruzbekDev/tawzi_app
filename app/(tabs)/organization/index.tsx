@@ -11,8 +11,9 @@ import OrganizationStatsList, {
 import { StatsListSkeleton } from "@/features/organization/ui/dashboard/stats-list-skeleton";
 import TopConsumers from "@/features/organization/ui/dashboard/top-consumers";
 import { TopConsumersSkeleton } from "@/features/organization/ui/dashboard/top-consumers-skeleton";
+import { useCallback, useState } from "react";
 
-import { ScrollView } from "react-native";
+import { RefreshControl, ScrollView } from "react-native";
 
 export default function OrganizationAdmin() {
   const {
@@ -25,8 +26,16 @@ export default function OrganizationAdmin() {
     financeStats,
     isLoading,
     hasBilling,
+    refetch,
   } = useDashboardData();
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    refetch();
+    setRefreshing(false);
+  }, []);
   return (
     <>
       <OrgDashboardHeader
@@ -35,7 +44,11 @@ export default function OrganizationAdmin() {
         deviceTypes={deviceTypes}
       />
 
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         {isLoading ? (
           <StatsListSkeleton />
         ) : (
@@ -45,7 +58,9 @@ export default function OrganizationAdmin() {
           />
         )}
 
-        <OrganizationCharts filter_type={unitType as "electric" | "gas" | "water"} />
+        <OrganizationCharts
+          filter_type={unitType as "electric" | "gas" | "water"}
+        />
 
         {hasBilling && isLoading && <FinanceChartSkeleton />}
 

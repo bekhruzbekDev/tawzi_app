@@ -2,12 +2,12 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
 import {
-    KeyboardTypeOptions,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  KeyboardTypeOptions,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { useThemeColors } from "../hooks/use-theme";
 
@@ -43,11 +43,19 @@ export default function DynamicInput<T extends FieldValues>(props: Props<T>) {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
+  const onChangeFun = (text: string) => {
+  console.log(text);
+  
+  };
+
   return (
     <Controller
       control={control}
       name={name}
-      render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+      render={({
+        field: { onChange, onBlur, value },
+        fieldState: { error },
+      }) => (
         <View style={styles.container}>
           {label && (
             <Text
@@ -74,7 +82,10 @@ export default function DynamicInput<T extends FieldValues>(props: Props<T>) {
               placeholderTextColor={theme.muted || "#a0a0a0"}
               placeholder={placeholder}
               onBlur={onBlur}
-              onChangeText={onChange}
+              onChangeText={(text) => {
+                onChangeFun(text);
+                onChange(text);
+              }}
               value={value}
               secureTextEntry={secureTextEntry && !isPasswordVisible}
               keyboardType={isPhone ? "phone-pad" : keyboardType}

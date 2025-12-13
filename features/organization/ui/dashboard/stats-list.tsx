@@ -10,11 +10,11 @@ export type ResourceType = "electric" | "gas" | "water";
 
 interface OrganizationStatsListProps {
   resourceType?: ResourceType;
-  data:{
-    losses:string,
-   stats: DashboardStats[]}
+  data: {
+    losses: string;
+    stats: DashboardStats[];
+  };
 }
-
 
 const getIconForType = (type: ResourceType) => {
   switch (type) {
@@ -32,13 +32,13 @@ const getIconForType = (type: ResourceType) => {
 const getGradientColors = (type: ResourceType): [string, string] => {
   switch (type) {
     case "electric":
-      return ["#4A90E2", "#5BA3F5"];
+      return ["#F59E0B", "#FBBF24"]; // Amber 500, Amber 400
     case "gas":
-      return ["#FF6B6B", "#FF8E8E"];
+      return ["#EF4444", "#F87171"]; // Red 500, Red 400
     case "water":
-      return ["#4ECDC4", "#6FE0D8"];
+      return ["#3B82F6", "#60A5FA"]; // Blue 500, Blue 400
     default:
-      return ["#4A90E2", "#5BA3F5"];
+      return ["#F59E0B", "#FBBF24"];
   }
 };
 
@@ -55,20 +55,22 @@ const getResourceLabel = (type: ResourceType) => {
   }
 };
 
-function OrganizationStatsList({ resourceType = "electric",data }: OrganizationStatsListProps) {
+function OrganizationStatsList({
+  resourceType = "electric",
+  data,
+}: OrganizationStatsListProps) {
   const theme = useThemeColors();
   const gradientColors = getGradientColors(resourceType);
   const iconName = getIconForType(resourceType);
   const resourceLabel = getResourceLabel(resourceType);
 
-
-  const resourceLossValue = "0"; 
+  const resourceLossValue = "0";
 
   return (
     <View>
       {/* Regular Cards ScrollView */}
-      <ScrollView 
-        style={styles.container} 
+      <ScrollView
+        style={styles.container}
         horizontal
         showsHorizontalScrollIndicator={false}
       >
@@ -100,7 +102,6 @@ function OrganizationStatsList({ resourceType = "electric",data }: OrganizationS
         })}
       </ScrollView>
 
-
       <View style={styles.resourceLossContainer}>
         <LinearGradient
           colors={gradientColors}
@@ -112,10 +113,16 @@ function OrganizationStatsList({ resourceType = "electric",data }: OrganizationS
             <View style={styles.textContainer}>
               <Text style={styles.gradientCardTitle}>Resurs yo'qotishlari</Text>
               <Text style={styles.gradientCardLabel}>{resourceLabel}</Text>
-              <Text style={styles.gradientCardValue}>{data.losses.slice(0,5)+" slice "}</Text>
+              <Text style={styles.gradientCardValue}>
+                {data.losses.slice(0, 5) + " slice "}
+              </Text>
             </View>
             <View style={styles.iconContainer}>
-              <Ionicons name={iconName as any} size={32} color="rgba(255, 255, 255, 0.9)" />
+              <Ionicons
+                name={iconName as any}
+                size={32}
+                color="rgba(255, 255, 255, 0.9)"
+              />
             </View>
           </View>
         </LinearGradient>
@@ -206,5 +213,5 @@ const styles = StyleSheet.create({
   cardWarning: {
     fontSize: 12,
     fontWeight: 500,
-  }
+  },
 });

@@ -2,11 +2,12 @@ import { Colors } from "@/shared/constants/theme";
 import { useThemeColors } from "@/shared/hooks/use-theme";
 import Feather from "@expo/vector-icons/Feather";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
   Pressable,
+  RefreshControl,
   StyleSheet,
   Text,
   View,
@@ -34,7 +35,16 @@ export const ConsumesList = (props: Props) => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
+    refetch,
   } = useConsumersData(activeFilter, searchValue);
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    refetch();
+    setRefreshing(false);
+  }, []);
 
   if (isLoading) {
     return (
@@ -50,6 +60,9 @@ export const ConsumesList = (props: Props) => {
     <FlatList
       data={customData}
       keyExtractor={(item) => item.id.toString()}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
       renderItem={({ item }) => (
         <Card
           consumer={item}

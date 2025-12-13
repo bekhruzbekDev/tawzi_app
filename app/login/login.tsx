@@ -1,13 +1,15 @@
 import { useLogin } from "@/features/login/model/use-login";
 import LoginForm from "@/features/login/ui/auth-form";
+import { useThemeColors } from "@/shared/hooks/use-theme";
 import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 
 export default function LoginScreen() {
   const { submitData, loading } = useLogin();
+  const theme = useThemeColors();
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
+      style={[styles.container, { backgroundColor: theme.background }]}
     >
       <LoginForm submit={submitData} loading={loading} />
     </KeyboardAvoidingView>
