@@ -7,6 +7,12 @@ import { LoginFormData } from "../ui/auth-form";
 import { loginMutation } from "./mutations";
 import { LoginDataRes } from "./types";
 
+const roleRoutes: Record<any, any> = {
+  OrganizationAdmin: "/(tabs)/organization",
+  Consumer: "/(tabs)/consumer",
+  Employer: "/(tabs)/organization",
+  owner: "/(tabs)/owner",
+};
 export const useLogin = () => {
   const router = useRouter();
   const setUser = useStore((state) => state.setUserData);
@@ -18,7 +24,7 @@ export const useLogin = () => {
       AsyncStorage.setItem("refresh_token", data.refresh_token);
       setUser(data?.user);
 
-      router.push("/");
+      router.push(roleRoutes[data?.user?.role ?? "owner"] ?? "/");
     },
     onError: (err: any) => {
       console.log({ err });

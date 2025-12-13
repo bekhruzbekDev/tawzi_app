@@ -88,8 +88,6 @@ export const CreateEmployeeSheet = forwardRef<BottomSheetModal, Props>(
     );
 
     const onFormSubmit = (data: any) => {
-      console.log(initialValues);
-
       if (initialValues) {
         editMutation(data, {
           onSuccess: () => {

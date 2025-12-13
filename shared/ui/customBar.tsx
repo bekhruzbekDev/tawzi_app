@@ -1,5 +1,4 @@
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { useEffect } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated, {
   FadeIn,
@@ -21,6 +20,7 @@ const CustomNavBar: React.FC<BottomTabBarProps> = ({
   descriptors,
   navigation,
 }) => {
+  const hidePages = useStore((state) => state.hidePages);
   const userData = useStore((state) => state.user);
   const setTabBarInset = useStore((state) => state.setTabBarInset);
   const { bottom: safeBottom } = useSafeAreaInsets();
@@ -36,7 +36,9 @@ const CustomNavBar: React.FC<BottomTabBarProps> = ({
       ? "organization"
       : "owner"
     : "";
-  const routes = allRoutes.filter((item) => item.role.includes(userRole));
+  const routes = allRoutes.filter(
+    (item) => item.role.includes(userRole) && !hidePages.includes(item.id)
+  );
 
   // useEffect(() => {
   //   setTabBarInset(72 + safeBottom);

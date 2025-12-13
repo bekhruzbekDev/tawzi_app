@@ -57,10 +57,10 @@ export const useEmployeeActions = () => {
         login: item.username,
         phone: item.phone_number,
         permissions: {
-          can_send_command: item.add_device_permission,
+          can_send_command: item.valve_control_permission,
           can_add_employee: item.add_user_permission,
-          can_add_meter: item.add_consumer_permission,
-          can_add_consumer: item.valve_control_permission,
+          can_add_meter: item.add_device_permission,
+          can_add_consumer: item.add_consumer_permission,
         },
       })) ?? [];
 

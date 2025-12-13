@@ -8,6 +8,7 @@ import { GetUserRes } from "../types/helper.types";
 
 export const useAuth = () => {
   const router = useRouter();
+
   const setUSerData = useStore((state) => state.setUserData);
   const setHidePages = useStore((state) => state.setHidePages);
   const hidePages = useStore((state) => state.hidePages);
@@ -22,7 +23,7 @@ export const useAuth = () => {
       setHidePages(
         data?.data.role == "OrganizationAdmin"
           ? [...hidePages]
-          : data?.data.role == "Employer"
+          : data?.data.role == "Employer" && !data?.data.permissions?.add_device_permission
           ? [...hidePages, "organizationEmployees"]
           : [...hidePages]
       );
@@ -41,4 +42,3 @@ export const useAuth = () => {
   }, [data, isSuccess, isLoading]);
   return { isLoading, data, isSuccess };
 };
-

@@ -28,6 +28,7 @@ const PROFILE_LOGO = require("../../../assets/images/logo.png");
 export default function ProfileScreen() {
   const router = useRouter();
   const user = useStore((state) => state.user);
+  const setUserData = useStore((state) => state.setUserData);
   const isDarkMode = useStore((state) => state.isDarkMode);
   const setDarkMode = useStore((state) => state.setDarkMode);
   const theme = useThemeColors();
@@ -35,7 +36,7 @@ export default function ProfileScreen() {
   const [language, setLanguage] = useState<"uz" | "ru" | "kr">("uz");
   const languageSheetRef = useRef<BottomSheetModal>(null);
   const languageSnapPoints = useMemo(() => ["42%"], []);
-
+  const setHidePages = useStore((state) => state.setHidePages);
   const initials = useMemo(() => {
     const first = user?.first_name?.[0] ?? "";
     const last = user?.last_name?.[0] ?? "";
@@ -51,6 +52,8 @@ export default function ProfileScreen() {
   const logout = async () => {
     await AsyncStorage.removeItem("access_token");
     await AsyncStorage.removeItem("refresh_token");
+    setUserData(null);
+    setHidePages([]);
     router.push("/login/login");
   };
 

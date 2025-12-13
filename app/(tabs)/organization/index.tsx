@@ -11,6 +11,7 @@ import OrganizationStatsList, {
 import { StatsListSkeleton } from "@/features/organization/ui/dashboard/stats-list-skeleton";
 import TopConsumers from "@/features/organization/ui/dashboard/top-consumers";
 import { TopConsumersSkeleton } from "@/features/organization/ui/dashboard/top-consumers-skeleton";
+import { useStore } from "@/shared/store/store";
 import { useCallback, useState } from "react";
 
 import { RefreshControl, ScrollView } from "react-native";
@@ -30,6 +31,8 @@ export default function OrganizationAdmin() {
   } = useDashboardData();
 
   const [refreshing, setRefreshing] = useState(false);
+  const hidePage = useStore((state) => state.hidePages);
+  console.log(hidePage);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);

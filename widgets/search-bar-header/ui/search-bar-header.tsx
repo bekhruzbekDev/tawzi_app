@@ -47,7 +47,7 @@ export const SearchBarHeader = forwardRef<View, Props>(
     };
 
     return (
-      <View style={[styles.header, { zIndex: 100 }]} ref={ref}>
+      <View style={[styles.header]} ref={ref}>
         <View style={[styles.searchContainer, { backgroundColor: theme.card }]}>
           <Feather name="search" size={20} color={theme.muted} />
           <TextInput
@@ -58,7 +58,7 @@ export const SearchBarHeader = forwardRef<View, Props>(
             onChangeText={onChange}
           />
         </View>
-        <View style={{ position: "relative", zIndex: 100 }}>
+        <View style={{ position: "relative" }}>
           <TouchableOpacity
             style={[styles.filterBtn, { backgroundColor: theme.card }]}
             onPress={handlePress}
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingHorizontal: 16,
     paddingTop: 12,
-    zIndex: 10,
+    // zIndex: 10,
   },
   filterBtn: {
     paddingHorizontal: 20,

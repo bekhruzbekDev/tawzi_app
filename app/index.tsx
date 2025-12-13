@@ -6,6 +6,7 @@ export default function Index() {
   const demo = false;
   const loading = true;
   const { data, isLoading, isSuccess } = useAuth();
+
   if (demo) return <Redirect href={"/(tabs)/consumer/statistics"} />;
 
   if (isLoading) return <PageLoading />;
